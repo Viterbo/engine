@@ -1,0 +1,5 @@
+Tengo que hacer un engine que reciba un JSON y que genere un juego.
+Lo primero por donde voy a empezar es por crear escenas y transiciones mostrando imágenes y videos de youtube
+Para eso tenog que hacer un plugin que permita sicronizar elementos html con objetos dentro del canvas (si no existe ya)
+Quiero darle también la posibilidad de animación libre, se me ocurre abilitar tweens de la siguiete manera:
+

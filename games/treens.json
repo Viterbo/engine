@@ -1,0 +1,31 @@
+{
+    "classes": {
+        "FadeInOut": {
+            "tween": {
+                "target": "self",
+                "from": "self.from",
+                "to":
+                
+            }
+        }
+    },
+    "scenes": {
+        "test": {
+            "A": {
+                "type": "DisplayObject",
+                "width": "100px",
+                "height": "100px",
+                "position": {
+                    "my": "top left",
+                    "at": "top left",
+                    "of": "parent"                    
+                },
+                "from": {
+                    "my": "top left",
+                    "at": "top left",
+                    "of": "parent"                    
+                }
+            }
+        }
+    }
+}

@@ -1,25 +1,94 @@
-    window.onload = function() {
+window.onload = function() {
 
-        var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
+    var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
-        function preload() {
+    function preload() {
 
-            //  You can fill the preloader with as many assets as your game requires
+        game.load.image('backdrop', 'assets/pics/remember-me.jpg');
+        game.load.image('card', 'assets/sprites/mana_card.png');
 
-            //  Here we are loading an image. The first parameter is the unique
-            //  string by which we'll identify the image later in our code.
+    }
 
-            //  The second parameter is the URL of the image (relative)
-            game.load.image('einstein', 'assets/pics/ra_einstein.png');
+    var card;
+    var cursors;
 
+    function create() {
+
+        game.world.setBounds(0, 0, 1920, 1200);
+
+        game.add.sprite(0, 0, 'backdrop');
+
+        card = game.add.sprite(200.5, 200.5, 'card');
+
+        game.physics.enable(card, Phaser.Physics.ARCADE);
+        card.body.collideWorldBounds = true;
+
+        game.camera.follow(card);
+
+        cursors = game.input.keyboard.createCursorKeys();
+
+    }
+
+    function update() {
+
+        card.body.velocity.x = 0;
+        card.body.velocity.y = 0;
+
+        if (cursors.left.isDown)
+        {
+            // card.x -= 4;
+            card.body.velocity.x = -240;
+        }
+        else if (cursors.right.isDown)
+        {
+            // card.x += 4;
+            card.body.velocity.x = 240;
         }
 
-        function create() {
-
-            //  This creates a simple sprite that is using our loaded image and
-            //  displays it on-screen
-            game.add.sprite(0, 0, 'einstein');
-
+        if (cursors.up.isDown)
+        {
+            // card.y -= 4;
+            card.body.velocity.y = -240;
+        }
+        else if (cursors.down.isDown)
+        {
+            // card.y += 4;
+            card.body.velocity.y = 240;
         }
 
-    };
+    }
+
+    function render() {
+
+        game.debug.cameraInfo(game.camera, 500, 32);
+        game.debug.spriteCoords(card, 32, 32);
+        // game.debug.physicsBody(card.body);
+
+    }
+        
+
+    var resizeGame = function () {
+
+        var height = window.innerHeight;
+        var width = window.innerWidth;
+
+        game.width = width;
+        game.height = height;
+        // game.stage.bounds.width = width;
+        // game.stage.bounds.height = height;
+
+        if (game.renderType === 1) {
+            console.log("ENTRO ACA");
+            game.renderer.resize(width, height);
+            Phaser.Canvas.setSmoothingEnabled(game.context, false);
+        }
+
+        game.camera.setSize(width, height);
+
+    }        
+
+
+    window.onresize = resizeGame;
+
+
+};
