@@ -11,14 +11,14 @@ window.onload = function() {
 
     var card;
     var cursors;
-
+    var dom;
     function create() {
 
         game.world.setBounds(0, 0, 1920, 1200);
 
         game.add.sprite(0, 0, 'backdrop');
 
-        card = game.add.sprite(200.5, 200.5, 'card');
+        card = game.add.sprite(200, 200, 'card');
 
         game.physics.enable(card, Phaser.Physics.ARCADE);
         card.body.collideWorldBounds = true;
@@ -26,6 +26,11 @@ window.onload = function() {
         game.camera.follow(card);
 
         cursors = game.input.keyboard.createCursorKeys();
+
+
+        dom = new DOM_Wrapper(game, 777, 77);
+        dom.width = 100;
+        dom.height = 200;
 
     }
 
@@ -54,6 +59,7 @@ window.onload = function() {
         {
             // card.y += 4;
             card.body.velocity.y = 240;
+
         }
 
     }
@@ -65,7 +71,7 @@ window.onload = function() {
         // game.debug.physicsBody(card.body);
 
     }
-        
+
 
     var resizeGame = function () {
 
@@ -85,7 +91,7 @@ window.onload = function() {
 
         game.camera.setSize(width, height);
 
-    }        
+    };
 
 
     window.onresize = resizeGame;

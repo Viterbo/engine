@@ -1,12 +1,8 @@
 {
     "classes": {
-        "FadeInOut": {
-            "tween": {
-                "target": "self",
-                "from": "self.from",
-                "to":
-                
-            }
+        "scene-ready-tweeners": {
+            "on": ["scene.ready"],
+            "time": 1000
         }
     },
     "scenes": {
@@ -18,13 +14,16 @@
                 "position": {
                     "my": "top left",
                     "at": "top left",
-                    "of": "parent"                    
+                    "of": "parent"
                 },
-                "from": {
-                    "my": "top left",
-                    "at": "top left",
-                    "of": "parent"                    
-                }
+                "behaviors": [
+                    "FadeIn": {
+                        "class": "scene-ready-tweeners",
+                    },
+                    "MoveTo": {
+                        "class": "scene-ready-tweeners",
+                    }
+                ]
             }
         }
     }
