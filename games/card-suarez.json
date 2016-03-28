@@ -1,0 +1,41 @@
+{
+    "scenes": {
+        "card": {
+            "fr_top": {
+                "type": "DisplayObject",
+                "width": "100%",
+                "height": "12%",
+                "position": {
+                    "my": "top left",
+                    "at": "top left",
+                    "of": "parent"                    
+                }
+            },
+            "fr_body": {
+                "type": "DisplayObject",
+                "anchors": {
+                    "top-left": {
+                        "at": "bottom left",
+                        "of": "parent.fr_top"
+                    },
+                    "bottom-right": {
+                        "at": "top right",
+                        "of": "parent.fr_bottom"
+                    }
+                },
+                "children": {
+                }
+            },            
+            "fr_bottom": {
+                "type": "DisplayObject",
+                "width": "100%",
+                "height": "5%",
+                "position": {
+                    "my": "bottom left",
+                    "at": "bottom left",
+                    "of": "parent"                    
+                }
+            }
+        }
+    }
+}
