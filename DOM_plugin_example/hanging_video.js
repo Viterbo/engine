@@ -138,10 +138,9 @@ function render() {
         game.height = height;
         // game.stage.bounds.width = width;
         // game.stage.bounds.height = height;
-
+        
+        game.renderer.resize(width, height);
         if (game.renderType === 1) {
-            console.log("ENTRO ACA");
-            game.renderer.resize(width, height);
             Phaser.Canvas.setSmoothingEnabled(game.context, false);
         }
 

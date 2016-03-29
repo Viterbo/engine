@@ -1,11 +1,11 @@
 window.onload = function() {
 
-    var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
     function preload() {
 
         game.load.image('backdrop', 'assets/pics/remember-me.jpg');
-        // game.load.image('card', 'assets/sprites/mana_card.png');
+        game.load.image('card', 'assets/sprites/mana_card.png');
 
     }
 
@@ -93,9 +93,8 @@ window.onload = function() {
         // game.stage.bounds.width = width;
         // game.stage.bounds.height = height;
 
+        game.renderer.resize(width, height);
         if (game.renderType === 1) {
-            console.log("ENTRO ACA");
-            game.renderer.resize(width, height);
             Phaser.Canvas.setSmoothingEnabled(game.context, false);
         }
 

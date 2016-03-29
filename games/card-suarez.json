@@ -13,22 +13,22 @@
                 }
             },
             "frBody": {
-                "type": "DisplayObject",                
+                "type": "DisplayObject",
                 "anchors": {
                     "top-left": {
                         "my": "top left",
                         "at": "bottom left",
-                        "of": "parent.fr_top"
+                        "of": "parent.frTop"
                     },
                     "bottom-right": {
                         "my": "bottom right",
                         "at": "top right",
-                        "of": "parent.fr_bottom"
+                        "of": "parent.frBottom"
                     }
                 },
                 "children": {
                     "background": {
-                        "type": "String",
+                        "type": "Sprite",
                         "texture": "/cards/images/Luis-Suarez-uruguay-best-striker.jpg",
                     },
                     "video": {
