@@ -1,77 +1,135 @@
 window.onload = function() {
 
-    var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+   
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
-    function preload() {
+function preload() {
 
-        game.load.image('backdrop', 'assets/pics/remember-me.jpg');
-        game.load.image('card', 'assets/sprites/mana_card.png');
+    game.load.image('a', 'assets/sprites/a.png');
+    game.load.image('b', 'assets/sprites/b.png');
 
+}
+
+var codeCaption;
+var bodyAs = [];
+var part_1 ="<iframe frameborder='0' allowfullscreen='true' style='height:100%; width:100%'src='https://www.youtube.com/embed/",
+    part_2 = "?feature=oembed&amp;autoplay=1&amp;wmode=opaque&amp;rel=0&amp;showinfo=0&amp;modestbranding=0&amp;fs=1'></iframe>";
+
+function create() {
+    
+    
+    
+    game.stage.backgroundColor = '#124184';
+
+    // Enable Box2D physics
+    game.physics.startSystem(Phaser.Physics.BOX2D);
+    game.physics.box2d.debugDraw.joints = true;
+    game.physics.box2d.gravity.y = 500;
+
+    // Simple case with joint anchors at the center of each sprite, and
+    // using the position of the sprites to determine the joint length.
+{
+        // Static box
+        var spriteA = game.add.sprite(200, 200, 'a');
+        game.physics.box2d.enable(spriteA);
+        spriteA.body.static = true;
+        
+        // Dynamic box
+        var spriteB = game.add.sprite(300, 400, 'b');
+        game.physics.box2d.enable(spriteB);
+        
+        //bodyA, bodyB, length, ax, ay, bx, by, frequency, damping
+        game.physics.box2d.distanceJoint(spriteA, spriteB);
+        
+        bodyAs.push(spriteA.body);
+    }
+    
+    // This case sets the joint target length explicitly.
+    {
+        // Static box
+        var spriteA = game.add.sprite(400, 200, 'a');
+        game.physics.box2d.enable(spriteA);
+        spriteA.body.static = true;
+        
+        // Dynamic box
+        var spriteB = new DOM_Wrapper(part_1 + "I53HDr0-Qew" + part_2, game, 500, 350, 200, 150, 0.5, 0.5);        
+        game.physics.box2d.enable(spriteB);
+        
+        //bodyA, bodyB, length, ax, ay, bx, by, frequency, damping
+        game.physics.box2d.distanceJoint(spriteA, spriteB, 300);
+        
+        bodyAs.push(spriteA.body);
+    }
+    
+    // This case uses all parameters. The joint anchor is offset in each body.
+    {
+        // Static box
+        var spriteA = game.add.sprite(600, 200, 'a');
+        game.physics.box2d.enable(spriteA);
+        spriteA.body.static = true;
+        
+        // Dynamic box
+        var spriteB = game.add.sprite(700, 400, 'b');
+        game.physics.box2d.enable(spriteB);
+        
+        //bodyA, bodyB, length, ax, ay, bx, by, frequency, damping
+        game.physics.box2d.distanceJoint(spriteA, spriteB, 150, 0, 0, 40, 40, 3, 0.25);
+        
+        bodyAs.push(spriteA.body);
     }
 
-    var card;
-    var cursors;
-    var dom;
-    function create() {
+    // Set up handlers for mouse events
+    game.input.onDown.add(mouseDragStart, this);
+    game.input.addMoveCallback(mouseDragMove, this);
+    game.input.onUp.add(mouseDragEnd, this);
+    
+    game.add.text(5, 5, 'Distance joint. Click to start.', { fill: '#ffffff', font: '14pt Arial' });
+    game.add.text(5, 25, 'Mouse over bodyA to see the code used to create the joint.', { fill: '#ffffff', font: '14pt Arial' });
+    codeCaption = game.add.text(5, 50, 'Parameters: bodyA, bodyB, length, ax, ay, bx, by, frequency, damping', { fill: '#dddddd', font: '10pt Arial' });
+    codeCaption = game.add.text(5, 65, '', { fill: '#ccffcc', font: '14pt Arial' });
+    
+    // Start paused so user can see how the joints start out
+    game.paused = true;
+    game.input.onDown.add(function(){game.paused = false;}, this);
 
-        game.world.setBounds(0, 0, 1920, 1200);
+}
 
-        game.add.sprite(0, 0, 'backdrop');
+function mouseDragStart() { game.physics.box2d.mouseDragStart(game.input.mousePointer); }
+function mouseDragMove() {  game.physics.box2d.mouseDragMove(game.input.mousePointer); }
+function mouseDragEnd() {   game.physics.box2d.mouseDragEnd(); }
 
-        card = game.add.sprite(200, 200, 'card');
-
-        game.physics.enable(card, Phaser.Physics.ARCADE);
-        card.body.collideWorldBounds = true;
-
-        game.camera.follow(card);
-
-        cursors = game.input.keyboard.createCursorKeys();
-
-
-        dom = new DOM_Wrapper(game, 777, 77);
-        dom.width = 100;
-        dom.height = 200;
-
+function update() {
+    
+    if (bodyAs[0].containsPoint(game.input.mousePointer))
+    {
+        codeCaption.text = 'game.physics.box2d.distanceJoint(spriteA, spriteB)';
     }
-
-    function update() {
-
-        card.body.velocity.x = 0;
-        card.body.velocity.y = 0;
-
-        if (cursors.left.isDown)
-        {
-            // card.x -= 4;
-            card.body.velocity.x = -240;
-        }
-        else if (cursors.right.isDown)
-        {
-            // card.x += 4;
-            card.body.velocity.x = 240;
-        }
-
-        if (cursors.up.isDown)
-        {
-            // card.y -= 4;
-            card.body.velocity.y = -240;
-        }
-        else if (cursors.down.isDown)
-        {
-            // card.y += 4;
-            card.body.velocity.y = 240;
-
-        }
-
+    else if (bodyAs[1].containsPoint(game.input.mousePointer))
+    {
+        codeCaption.text = 'game.physics.box2d.distanceJoint(spriteA, spriteB, 150)';
     }
-
-    function render() {
-
-        game.debug.cameraInfo(game.camera, 500, 32);
-        game.debug.spriteCoords(card, 32, 32);
-        // game.debug.physicsBody(card.body);
-
+    else if (bodyAs[2].containsPoint(game.input.mousePointer))
+    {
+        codeCaption.text = 'game.physics.box2d.distanceJoint(spriteA, spriteB, 150, 0, 0, 40, 40, 3, 0.25)';
     }
+    else
+    {
+        codeCaption.text = '';
+    }
+    
+}
 
+function render() {
+    
+    // update will not be called while paused, but we want to change the caption on mouse-over
+    if (game.paused)
+    {
+        update();
+    }
+    
+    game.debug.box2dWorld();
+    
+}
 
     var resizeGame = function () {
 

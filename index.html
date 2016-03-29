@@ -3,7 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <title>Phaser!</title>
-        <script src="js/phaser.js"></script>
+        <!--script src="js/phaser.js"></script-->
+        <script src="js/phaser.2.2.2.box2d.min.js"></script>
+        <script src="js/jquery.js"></script>
+        <!--script src="js/treequery.js"></script-->
         <script src="plugins/CameraShake.js"></script>
         <script src="plugins/DOM_Wrapper.js"></script>
         <script src="engine.js"></script>
@@ -11,8 +14,9 @@
     <style>
         body, html { margin: 0px; }
         #phaser-example {
+            display: inline-block;
             height: 600px;
-            width: 8000px;
+            width: 800px;
         }
     </style>
     <body>
