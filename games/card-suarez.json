@@ -9,7 +9,7 @@
                 "position": {
                     "my": "top left",
                     "at": "top left",
-                    "of": "parent"                    
+                    "of": "parent"
                 }
             },
             "frBody": {
@@ -29,7 +29,7 @@
                 "children": {
                     "background": {
                         "type": "Sprite",
-                        "texture": "/cards/images/Luis-Suarez-uruguay-best-striker.jpg",
+                        "texture": "/cards/images/Luis-Suarez-uruguay-best-striker.jpg"
                     },
                     "video": {
                         "type": "DOM_Wrapper",
@@ -42,9 +42,9 @@
                             "at": "middle center",
                             "of": "parent"
                         }
-                    } 
+                    }
                 }
-            },            
+            },
             "frBottom": {
                 "type": "BitmapData",
                 "fillStyle": "#000000",
@@ -53,7 +53,7 @@
                 "position": {
                     "my": "bottom left",
                     "at": "bottom left",
-                    "of": "parent"                    
+                    "of": "parent"
                 }
             }
         }

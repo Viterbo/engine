@@ -5,12 +5,15 @@ window.onload = function() {
 
     function preload() {
         console.log("preload()");
-        game.load.image('a', 'assets/sprites/a.png');
-        game.load.image('b', 'assets/sprites/b.png');
+        game.load.json('gamejson', 'games/card-suarez.json');
     }
 
-    var u=0, r=0;
+    var u=0, r=0, gamejson; 
     function create() {
+        console.log("create()");
+        game.stage.backgroundColor = '#0072bc';
+        gamejson = game.cache.getJSON('gamejson');
+        console.log(gamejson);      
     }
 
     function update() {
