@@ -71887,7 +71887,7 @@ Phaser.Loader.prototype = {
                 {
                     if (window['console'])
                     {
-                        console.error(e);
+                        console.error(e, e.stack);
                     }
                 }
             }
@@ -71909,7 +71909,7 @@ Phaser.Loader.prototype = {
                 {
                     if (window['console'])
                     {
-                        console.error(e);
+                        console.error(e, e.stack);
                     }
                 }
 

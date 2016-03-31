@@ -4,7 +4,7 @@ window.onload = function() {
     var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
     function preload() {
-        console.log("preload()");        
+        console.log("preload()");
         game.load.json('gamejson', 'games/card-suarez.json');
     }
 
