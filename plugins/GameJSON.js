@@ -146,7 +146,7 @@ Phaser.Plugin.GameJSON.Base.prototype = {
         console.assert(this.children, "ERROR: this.children does't exist");
         for (var i=0; i<this.children.length; i++) {
             this.children[i].create();
-            this.children[i].childrenDoCreate();
+            // this.children[i].childrenDoCreate();
         }        
     },
     getChild: function(name) {        
@@ -187,14 +187,14 @@ Phaser.Plugin.GameJSON.Base.prototype = {
                 }
         }
         
-        x = this.phaserObj.x + this.width * ox;
-        y = this.phaserObj.y + this.height * oy;        
+        x = this.phaserObj.x + this.phaserObj.width * ox;
+        y = this.phaserObj.y + this.phaserObj.height * oy;        
         return {x:x, y:y};
         
     },
-    computeLayout: function () {
-        // console.log("computeLayout>---->",this, this.parent, this.parent.width);
-        var result = {width: 200, height: 100, x:0,y:0};
+    computeSize: function () {
+        // console.log("computePosition>---->",this, this.parent, this.parent.width);
+        var result = {width: 200, height: 100};
         
         if (this.spec.width) {
             if (typeof this.spec.width == "string" && this.spec.width.indexOf("%") != -1) {
@@ -213,7 +213,12 @@ Phaser.Plugin.GameJSON.Base.prototype = {
                 result.height = parseInt(this.parent.height);
             }
         }
-                
+        return result;
+    },
+    computePosition: function () {
+        // console.log("computePosition>---->",this, this.parent, this.parent.width);
+        var result = {x:0,y:0};
+        
         if (this.spec.position) {
             console.assert(typeof this.spec.position.of == "string", "ERROR: position MUST have a 'of' attribute referencing a valid object");
             console.assert(typeof this.spec.position.at == "string", "ERROR: position MUST have a 'at' attribute referencing a valid object");
@@ -230,15 +235,18 @@ Phaser.Plugin.GameJSON.Base.prototype = {
         }
         return result;
     },
-    setLayout: function (layout) {
-        this.phaserObj.width  = layout.width;
-        this.phaserObj.height = layout.height;
-        this.phaserObj.x      = layout.x;
-        this.phaserObj.y      = layout.y;            
+    setSize: function (size) {
+        this.phaserObj.width  = size.width;
+        this.phaserObj.height = size.height;       
+    },
+    setPosition: function (pos) {
+        this.phaserObj.x      = pos.x;
+        this.phaserObj.y      = pos.y;            
     },
     resize: function () {
         console.log("Phaser.Plugin.GameJSON.base.prototype.resize");
-        this.setLayout(this.computeLayout());
+        this.setSize(this.computeSize());
+        this.setPosition(this.computePosition());
         for (var i in this.children) {
             this.children[i].resize();
         }
@@ -257,6 +265,9 @@ Phaser.Plugin.GameJSON.Scene.prototype.constructor = Phaser.Plugin.GameJSON.Scen
 Phaser.Plugin.GameJSON.Scene.prototype.resize = function () {
     this.width = this.game.world.width;
     this.height = this.game.world.height;
+    
+    console.log(this.game.stage.width);
+    
     for (var i in this.children) {
         this.children[i].resize();
     }
@@ -288,7 +299,7 @@ Phaser.Plugin.GameJSON.BitmapData.prototype = Object.create(Phaser.Plugin.GameJS
 Phaser.Plugin.GameJSON.BitmapData.prototype.constructor = Phaser.Plugin.GameJSON.BitmapData;
 Phaser.Plugin.GameJSON.BitmapData.prototype.create = function () {
     var pos, color = Phaser.Plugin.GameJSON.utils.hexToRgb(this.spec.fillStyle);
-    var layout = {x:0,y:0,width:10,height:10}; //this.computeLayout();
+    var layout = {x:22,y:33,width:200,height:200};
     this.bmd = this.game.make.bitmapData(layout.width,layout.height);
     this.bmd.fill(color.r, color.g, color.b);
     this.img = this.bmd.addToWorld(layout.x,layout.y);
@@ -296,12 +307,11 @@ Phaser.Plugin.GameJSON.BitmapData.prototype.create = function () {
     this.childrenDoCreate();
 }
 
-Phaser.Plugin.GameJSON.BitmapData.prototype.setLayout = function (layout) {
-    this.bmd.width  = layout.width;
-    this.bmd.height = layout.height;
-    Phaser.Plugin.GameJSON.Base.prototype.setLayout.call(this, layout);
+Phaser.Plugin.GameJSON.BitmapData.prototype.setSize = function (size) {
+    this.bmd.width  = size.width;
+    this.bmd.height = size.height;
+    Phaser.Plugin.GameJSON.Base.prototype.setSize.call(this, size);
 }
-
 // --------------------------------------------------------------------------------------
 
 Phaser.Plugin.GameJSON.DOM_Wrapper = function (game, spec) {

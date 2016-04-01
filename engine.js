@@ -10,7 +10,7 @@ window.onload = function() {
 
     var u=0, r=0, gamejson; 
     function create() {
-        console.log("create()");
+        console.log("create()");        
         game.stage.backgroundColor = '#FFFFFF';
         gamejson = game.cache.getJSON('gamejson');
         console.log(gamejson);
@@ -41,8 +41,10 @@ window.onload = function() {
 
         game.width = width;
         game.height = height;
-        // game.stage.bounds.width = width;
-        // game.stage.bounds.height = height;
+        game.stage.width = width;
+        game.stage.height = height;
+        game.world.width = width;
+        game.world.height = height;
         game.renderer.view.style.position = "absolute";
         game.renderer.view.style.top = "0px";
         game.renderer.view.style.left = "0px";
