@@ -20,7 +20,7 @@ Phaser.Plugin.GameJSON = function(game, parent) {
         for (var name in this._data.scenes) {
             console.log(name, this._data.scenes[name]);
             var spec = this._data.scenes[name];
-            spec.child_name = name; 
+            spec.instance_name = name; 
             var state = new Phaser.Plugin.GameJSON.Scene(game, spec);
             game.state.add(name, state, spec.autostart);
             // this.scenes[name] = state;
@@ -37,7 +37,7 @@ Phaser.Plugin.GameJSON = function(game, parent) {
     };
     this._resize = function () {
         var current = this.game.state.getCurrentState();
-        console.log("onResize() current state: ", current);
+        // console.log("onResize() current state: ", current);
         current.resize();
     };
     
@@ -79,6 +79,7 @@ Phaser.Plugin.GameJSON.prototype.resize = function() {
 Phaser.Plugin.GameJSON.Base = function (game, spec) {
     this.game = game;
     this.spec = spec;
+    this.instance_name = spec.instance_name;
     this.createChildren();
     this.sortChildren();
 }
@@ -110,20 +111,20 @@ Phaser.Plugin.GameJSON.Base.prototype = {
             } 
             var child = list.shift();
             var deps = child.getDependencies();
-            console.assert(typeof child.spec.child_name == "string", "ERROR: child.spec.child_name is not a string", child);
-            ready[child.spec.child_name] = true;
+            console.assert(typeof child.spec.instance_name == "string", "ERROR: child.spec.instance_name is not a string", child);
+            ready[child.spec.instance_name] = true;
             for (var i=0; i<deps.length; i++) {
                 if (deps[i] == "parent") continue;
                 index = deps[i].indexOf("parent.");
                 if (index == 0) {
                     var dep = deps[i].substr(7);
                     if (!(dep in ready)) {
-                        ready[child.spec.child_name] = false;
+                        ready[child.spec.instance_name] = false;
                         list.push(child);
                     }
                 }
             }
-            if (ready[child.spec.child_name]) new_order.push(child);
+            if (ready[child.spec.instance_name]) new_order.push(child);
         }
         console.assert(this.children.length == new_order.length, "ERROR: some child lost in the sorting proccess");
         this.children = new_order;
@@ -136,7 +137,7 @@ Phaser.Plugin.GameJSON.Base.prototype = {
             var child = null;
             var constructor = Phaser.Plugin.GameJSON[child_spec.type];
             console.assert(constructor, "ERROR: type not found: ", child_spec.type, [child_spec]);
-            child_spec.child_name = name;
+            child_spec.instance_name = name;
             child = new constructor(this.game, child_spec);
             child.parent = this;            
             this.children.push(child);
@@ -151,7 +152,7 @@ Phaser.Plugin.GameJSON.Base.prototype = {
     },
     getChild: function(name) {        
         for (var i=0; i<this.children.length; i++) {
-            if (this.children[i].child_name == name) {
+            if (this.children[i].instance_name == name) {
                 return this.children[i];
             }
         }
@@ -189,11 +190,120 @@ Phaser.Plugin.GameJSON.Base.prototype = {
         
         x = this.phaserObj.x + this.phaserObj.width * ox;
         y = this.phaserObj.y + this.phaserObj.height * oy;        
-        return {x:x, y:y};
+        return {x:x, y:y, ox:ox, oy:oy};
         
     },
+    setDeployment: function (dep) {        
+        this.phaserObj.width  = dep.width;
+        this.phaserObj.height = dep.height;       
+        this.phaserObj.x      = dep.x;
+        this.phaserObj.y      = dep.y;
+        return this;
+    },
+    updateDeployment: function () {
+        this.computeDeployment(true);
+        return this;
+    },
+    computeDeployment: function (apply) {
+        var result = {width: 12, height: 34},
+            berofe = {};
+        
+        if (this.spec.width) {
+            if (typeof this.spec.width == "string" && this.spec.width.indexOf("%") != -1) {
+                var w_percent = parseFloat(this.spec.width.substr(0, this.spec.width.indexOf("%")));
+                result.width = w_percent * this.parent.phaserObj.width / 100;
+            } else {
+                result.width = parseInt(this.parent.phaserObj.width);
+            }
+        }
+        
+        if (this.spec.height) {
+            if (typeof this.spec.height == "string" && this.spec.height.indexOf("%") != -1) {
+                var h_percent = parseFloat(this.spec.height.substr(0, this.spec.height.indexOf("%")));
+                result.height = h_percent * this.parent.phaserObj.height / 100;
+            } else {
+                result.height = parseInt(this.parent.phaserObj.height);
+            }
+        }
+        
+        if (apply) {
+            this.setSize(result);
+        } else {
+            before = {
+                x: this.phaserObj.x,
+                y: this.phaserObj.y
+            }
+        }
+        
+        if (this.spec.position) {
+            console.assert(typeof this.spec.position.of == "string", "ERROR: position MUST have a 'of' attribute referencing a valid object");
+            console.assert(typeof this.spec.position.at == "string", "ERROR: position MUST have a 'at' attribute referencing a valid object");
+            var refobj = this.parent;
+            var index = this.spec.position.of.indexOf("parent.");
+            if (index != -1) {
+                refobj = this.parent.getChild(this.spec.position.of.substr("parent.".length));
+            }            
+            this.phaserObj.y = this.phaserObj.x = 0;            
+            var my_coords = this.translateToCoords(this.spec.position.my);
+            var at_coords = refobj.translateToCoords(this.spec.position.at);
+            result.x = at_coords.x - my_coords.x;
+            result.y = at_coords.y - my_coords.y;
+        }
+
+        if (this.spec.anchors) {
+            console.assert(this.spec.anchors.length == 2, "ERROR: anchors MUST be an array-like object width 2 objects containing {my, at, of} map each");
+            var refobj = [this.parent,this.parent],
+                index = [],
+                my_coords=[],
+                at_coords=[];
+            
+            this.phaserObj.y = this.phaserObj.x = 0;        
+            for (var i=0;i<2;i++) {
+                index[i] = this.spec.anchors[i].of.indexOf("parent.");
+                if (index[i] != -1) {
+                    refobj[i] = this.parent.getChild(this.spec.anchors[i].of.substr("parent.".length));
+                }            
+                my_coords[i] = this.translateToCoords(this.spec.anchors[i].my);
+                at_coords[i] = refobj[i].translateToCoords(this.spec.anchors[i].at);
+            }
+            
+            /*
+            result.x + result.width * my_coords[0].ox = at_coords[0].x;
+            result.x + result.width * my_coords[1].ox = at_coords[1].x;
+            
+            result.x + result.width * my_coords[0].ox - (result.x + result.width * my_coords[1].ox)= at_coords[0].x - (at_coords[1].x);            
+            result.x + result.width * my_coords[0].ox - result.x - result.width * my_coords[1].ox = at_coords[0].x - at_coords[1].x;
+            result.width * my_coords[0].ox - result.width * my_coords[1].ox = at_coords[0].x - at_coords[1].x;
+            result.width * (my_coords[0].ox - my_coords[1].ox) = at_coords[0].x - at_coords[1].x;
+            result.width = (at_coords[0].x - at_coords[1].x) / (my_coords[0].ox - my_coords[1].ox);  <<--- (width)
+            
+            result.x = at_coords[0].x - result.width * my_coords[0].ox; <<--- (x)
+            
+            */
+            
+            result.width  = Math.abs((at_coords[0].x - at_coords[1].x));
+            result.x      = at_coords[0].x - result.width * my_coords[0].ox;
+            result.height = Math.abs((at_coords[0].y - at_coords[1].y));
+            result.y      = at_coords[0].y - result.width * my_coords[0].ox;
+            
+            if (apply) {
+                this.setSize(result);
+            }
+        }
+
+        if (apply) {
+            this.setPosition(result);
+        } else {
+            this.setPosition(before);
+        }
+
+        
+        return result;
+           
+        
+    },
+    /*
     computeSize: function () {
-        // console.log("computePosition>---->",this, this.parent, this.parent.width);
         var result = {width: 200, height: 100};
         
         if (this.spec.width) {
@@ -216,7 +326,6 @@ Phaser.Plugin.GameJSON.Base.prototype = {
         return result;
     },
     computePosition: function () {
-        // console.log("computePosition>---->",this, this.parent, this.parent.width);
         var result = {x:0,y:0};
         
         if (this.spec.position) {
@@ -235,6 +344,7 @@ Phaser.Plugin.GameJSON.Base.prototype = {
         }
         return result;
     },
+    */
     setSize: function (size) {
         this.phaserObj.width  = size.width;
         this.phaserObj.height = size.height;       
@@ -244,9 +354,8 @@ Phaser.Plugin.GameJSON.Base.prototype = {
         this.phaserObj.y      = pos.y;            
     },
     resize: function () {
-        console.log("Phaser.Plugin.GameJSON.base.prototype.resize");
-        this.setSize(this.computeSize());
-        this.setPosition(this.computePosition());
+        // console.log("Phaser.Plugin.GameJSON.base.prototype.resize");
+        this.updateDeployment();
         for (var i in this.children) {
             this.children[i].resize();
         }
@@ -266,7 +375,7 @@ Phaser.Plugin.GameJSON.Scene.prototype.resize = function () {
     this.width = this.game.world.width;
     this.height = this.game.world.height;
     
-    console.log(this.game.stage.width);
+    // console.log(this.game.stage.width);
     
     for (var i in this.children) {
         this.children[i].resize();
@@ -307,6 +416,11 @@ Phaser.Plugin.GameJSON.BitmapData.prototype.create = function () {
     this.childrenDoCreate();
 }
 
+Phaser.Plugin.GameJSON.BitmapData.prototype.setDeployment = function (dep) {
+    this.bmd.width  = dep.width;
+    this.bmd.height = dep.height;
+    Phaser.Plugin.GameJSON.Base.prototype.setDeployment.call(this, size);
+}
 Phaser.Plugin.GameJSON.BitmapData.prototype.setSize = function (size) {
     this.bmd.width  = size.width;
     this.bmd.height = size.height;

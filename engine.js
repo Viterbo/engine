@@ -1,7 +1,7 @@
 window.onload = function() {
 
 
-    var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+    window.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
     function preload() {
         console.log("preload()");
@@ -19,10 +19,7 @@ window.onload = function() {
         
         game.plugins.gamejson = new Phaser.Plugin.GameJSON(game);
         console.log("game.plugins.gamejson", game.plugins.gamejson);
-        game.plugins.gamejson.setup({
-            shakeX: true,
-            shakeY: false
-        });
+        game.plugins.gamejson.setup({});
         game.plugins.gamejson.create(gamejson);
     }
 
@@ -31,20 +28,14 @@ window.onload = function() {
     }
 
     function render() {
+        
     }
 
-    function resize() {
-        console.log("resize()");
-
+    function resize() {        
         var height = window.innerHeight;
         var width = window.innerWidth;
+        var bounds = new Phaser.Rectangle(0, 0, width, height);
 
-        game.width = width;
-        game.height = height;
-        game.stage.width = width;
-        game.stage.height = height;
-        game.world.width = width;
-        game.world.height = height;
         game.renderer.view.style.position = "absolute";
         game.renderer.view.style.top = "0px";
         game.renderer.view.style.left = "0px";
@@ -52,8 +43,13 @@ window.onload = function() {
         if (game.renderType === 1) {
             Phaser.Canvas.setSmoothingEnabled(game.context, false);
         }
-
         game.camera.setSize(width, height);
+        game.camera.bounds = bounds;
+        game.world.bounds = bounds;
+        game.width = width;
+        game.height = height;
+        game.stage.width = width;
+        game.stage.height = height;
         if (game.plugins.gamejson) game.plugins.gamejson.resize();
     };
 

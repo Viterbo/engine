@@ -1,29 +1,46 @@
 {
-    "classes": {
-        "scene-ready-tweeners": {
-            "on": ["scene.ready"],
-            "time": 1000
-        }
-    },
     "scenes": {
-        "test": {
-            "A": {
-                "type": "DisplayObject",
-                "width": "100px",
-                "height": "100px",
-                "position": {
-                    "my": "top left",
-                    "at": "top left",
-                    "of": "parent"
-                },
-                "behaviors": [
-                    "FadeIn": {
-                        "class": "scene-ready-tweeners",
-                    },
-                    "MoveTo": {
-                        "class": "scene-ready-tweeners",
+        "card": {
+            "autostart": true,
+            "children": {                
+                "frTop": {
+                    "type": "BitmapData",
+                    "fillStyle": "#000",
+                    "width": "100%",
+                    "height": "12%",
+                    "position": {
+                        "my": "top left",
+                        "at": "top left",
+                        "of": "parent"
                     }
-                ]
+                },
+                "frBody": {
+                    "type": "BitmapData",
+                    "fillStyle": "#252",
+                    "anchors": {
+                        "top-left": {
+                            "my": "top left",
+                            "at": "bottom left",
+                            "of": "parent.frTop"
+                        },
+                        "bottom-right": {
+                            "my": "bottom right",
+                            "at": "top right",
+                            "of": "parent.frBottom"
+                        }
+                    }
+                },                
+                "frBottom": {
+                    "type": "BitmapData",
+                    "fillStyle": "#000",
+                    "width": "100%",
+                    "height": "5%",
+                    "position": {
+                        "my": "bottom left",
+                        "at": "bottom left",
+                        "of": "parent"
+                    }
+                }
             }
         }
     }

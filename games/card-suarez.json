@@ -2,7 +2,7 @@
     "scenes": {
         "card": {
             "autostart": true,
-            "children": {                
+            "children": {
                 "frTop": {
                     "type": "BitmapData",
                     "fillStyle": "#000",
@@ -12,6 +12,49 @@
                         "my": "top left",
                         "at": "top left",
                         "of": "parent"
+                    }
+                },
+                "frBody": {
+                    "type": "BitmapData",
+                    "fillStyle": "#FAA",
+                    "anchors": [
+                        {
+                            "my": "top left",
+                            "at": "bottom left",
+                            "of": "parent.frTop"
+                        },
+                        {
+                            "my": "bottom right",
+                            "at": "top right",
+                            "of": "parent.frBottom"
+                        }
+                    ],
+                    "children": {
+                        "background": {
+                            "type": "BitmapData",
+                            "fillStyle": "#2f3b95",
+                            "width": "100%",
+                            "height": "100%",
+                            "texture": "/cards/images/Luis-Suarez-uruguay-best-striker.jpg",
+                            "position": {
+                                "my": "top left",
+                                "at": "top left",
+                                "of": "parent"
+                            }
+                        },
+                        "video": {
+                            "type": "BitmapData",
+                            "fillStyle": "#F67",
+                            "youtube": "3zKoUda-WVA",
+                            "width": "50%",
+                            "height": "90%",
+                            "sizeRatio": "1.778",
+                            "position": {
+                                "my": "middle center",
+                                "at": "middle center",
+                                "of": "parent"
+                            }
+                        }
                     }
                 },
                 "frBottom": {
