@@ -59399,16 +59399,14 @@ Phaser.RequestAnimationFrame.prototype = {
         else
         {
             this._isSetTimeOut = false;
-
             this._onLoop = function (time) {
-                return _this.updateRAF(time);
+                return _this.updateRAF(time);;
             };
 
             this._timeOutID = window.requestAnimationFrame(this._onLoop);
         }
 
     },
-
     /**
     * The update method for the requestAnimationFrame
     * @method Phaser.RequestAnimationFrame#updateRAF

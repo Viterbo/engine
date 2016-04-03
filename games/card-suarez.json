@@ -1,6 +1,6 @@
 {
     "preload": {
-        "background":"/engine/images/Luis-Suarez-uruguay-best-striker.jpg"
+        "background":"images/Luis-Suarez-uruguay-best-striker.jpg"
     },
     "scenes": {
         "card": {

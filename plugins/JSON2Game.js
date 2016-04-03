@@ -72,12 +72,12 @@ Phaser.Plugin.JSON2Game.prototype.setup = function (obj) {
 Phaser.Plugin.JSON2Game.prototype.create = function(gamejson) {
     var self = this;
     for (var name in gamejson.preload) {        
-        game.load.image(name, gamejson.preload[name]);
+        this.game.load.image(name, gamejson.preload[name]);
     }
-    game.load.onLoadComplete.add(function () {
+    this.game.load.onLoadComplete.add(function () {
         self._create.call(self, gamejson);
     }, this);
-    game.load.start();
+    this.game.load.start();
     
     return this;
 };
@@ -322,6 +322,8 @@ Phaser.Plugin.JSON2Game.Base.prototype = {
         for (var i in this.children) {
             this.children[i].resize();
         }
+        // console.log(this);
+        //alert("resize: " + this.instance_name);
     }
 }
 // --------------------------------------------------------------------------------------
@@ -352,6 +354,7 @@ Phaser.Plugin.JSON2Game.Scene.prototype.create = function () {
 
 Phaser.Plugin.JSON2Game.Scene.prototype.update = function () {
     // console.log("Phaser.Plugin.JSON2Game.Scene.prototype.update");
+    // alert("update: Scene");
 }
 
 // --------------------------------------------------------------------------------------
@@ -381,13 +384,13 @@ Phaser.Plugin.JSON2Game.Sprite.prototype = Object.create(Phaser.Plugin.JSON2Game
 Phaser.Plugin.JSON2Game.Sprite.prototype.constructor = Phaser.Plugin.JSON2Game.Sprite;
 Phaser.Plugin.JSON2Game.Sprite.prototype.create = function () {
     // this.phaserObj = new CroppedSprite(game, 0, 0, this.spec.texture); // game.add.sprite(0, 0, this.spec.texture);
-    this.phaserObj =  game.add.sprite(0, 0, this.spec.texture);
-    game.add.existing(this.phaserObj);    
+    this.phaserObj =  this.game.add.sprite(0, 0, this.spec.texture);
+    this.game.add.existing(this.phaserObj);    
     
     this.cropRect  = new Phaser.Rectangle(0, 0, this.phaserObj.texture.width, this.phaserObj.texture.height);
     
     
-    this.mask = game.add.graphics(0, 0);
+    this.mask = this.game.add.graphics(0, 0);
 
     //	Shapes drawn to the Graphics object must be filled.
     this.mask.beginFill(0xff0000);

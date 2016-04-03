@@ -1,43 +1,19 @@
 {
+    "preload": {
+        "background":"images/Luis-Suarez-uruguay-best-striker.jpg"
+    },
     "scenes": {
         "card": {
             "autostart": true,
             "children": {                
-                "frTop": {
-                    "type": "BitmapData",
-                    "fillStyle": "#000",
-                    "width": "100%",
-                    "height": "12%",
+                "background": {
+                    "type": "Sprite",                            
+                    "width": "50%",
+                    "height": "50%",
+                    "texture": "background",                    
                     "position": {
                         "my": "top left",
                         "at": "top left",
-                        "of": "parent"
-                    }
-                },
-                "frBody": {
-                    "type": "BitmapData",
-                    "fillStyle": "#252",
-                    "anchors": {
-                        "top-left": {
-                            "my": "top left",
-                            "at": "bottom left",
-                            "of": "parent.frTop"
-                        },
-                        "bottom-right": {
-                            "my": "bottom right",
-                            "at": "top right",
-                            "of": "parent.frBottom"
-                        }
-                    }
-                },                
-                "frBottom": {
-                    "type": "BitmapData",
-                    "fillStyle": "#000",
-                    "width": "100%",
-                    "height": "5%",
-                    "position": {
-                        "my": "bottom left",
-                        "at": "bottom left",
                         "of": "parent"
                     }
                 }
