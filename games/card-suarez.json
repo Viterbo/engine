@@ -1,7 +1,6 @@
 {
     "preload": {
-        "background":"http://cardsandtokens.com/cards/images/Luis-Suarez-uruguay-best-striker.jpg",
-        "background1":"http://localhost/html/engine/cuadrado.png"
+        "background":"/engine/images/Luis-Suarez-uruguay-best-striker.jpg"
     },
     "scenes": {
         "card": {
