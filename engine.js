@@ -10,25 +10,24 @@ window.onload = function() {
 
     var u=0, r=0, gamejson; 
     function create() {
-        console.log("create()");        
+        console.log("create()");
         game.stage.backgroundColor = '#FFFFFF';
         gamejson = game.cache.getJSON('gamejson');
         console.log(gamejson);
         
         resize();
         
-        game.plugins.gamejson = new Phaser.Plugin.GameJSON(game);
-        console.log("game.plugins.gamejson", game.plugins.gamejson);
-        game.plugins.gamejson.setup({});
-        game.plugins.gamejson.create(gamejson);
+        game.plugins.json2game = new Phaser.Plugin.JSON2Game(game);        
+        game.plugins.json2game.setup({});
+        game.plugins.json2game.create(gamejson);        
     }
 
     function update() {
-        
+        console.log("update");
     }
 
     function render() {
-        
+        console.log("render");
     }
 
     function resize() {        
@@ -50,7 +49,7 @@ window.onload = function() {
         game.height = height;
         game.stage.width = width;
         game.stage.height = height;
-        if (game.plugins.gamejson) game.plugins.gamejson.resize();
+        if (game.plugins.json2game) game.plugins.json2game.resize();
     };
 
 

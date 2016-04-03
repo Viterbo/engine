@@ -1,5 +1,6 @@
 Tengo que hacer un engine que reciba un JSON y que genere un juego.
-
+http://phaser.io/examples/v2/sprites/child-sprites
+parent.addChild
 
 {
     "scenes": {

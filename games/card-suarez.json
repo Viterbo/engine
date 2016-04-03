@@ -1,4 +1,8 @@
 {
+    "preload": {
+        "background":"http://localhost/cardsandtokens.com/cards/images/Luis-Suarez-uruguay-best-striker.jpg",
+        "background1":"http://localhost/html/engine/cuadrado.png"
+    },
     "scenes": {
         "card": {
             "autostart": true,
@@ -31,11 +35,11 @@
                     ],
                     "children": {
                         "background": {
-                            "type": "BitmapData",
-                            "fillStyle": "#2f3b95",
+                            "type": "Sprite",                            
                             "width": "100%",
                             "height": "100%",
-                            "texture": "/cards/images/Luis-Suarez-uruguay-best-striker.jpg",
+                            "texture": "background",
+                            "texture-size": "cover",
                             "position": {
                                 "my": "top left",
                                 "at": "top left",
@@ -46,12 +50,12 @@
                             "type": "BitmapData",
                             "fillStyle": "#F67",
                             "youtube": "3zKoUda-WVA",
-                            "width": "50%",
+                            "width": "90%",
                             "height": "90%",
-                            "sizeRatio": "1.778",
+                            "aspectRatio": "1.778",
                             "position": {
-                                "my": "middle center",
-                                "at": "middle center",
+                                "my": "middle right",
+                                "at": "middle left",
                                 "of": "parent"
                             }
                         }
@@ -68,7 +72,7 @@
                         "of": "parent"
                     }
                 }
-            }
+            }            
         }
     }
 }
