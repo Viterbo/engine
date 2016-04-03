@@ -3,25 +3,58 @@
     <head>
         <meta charset="UTF-8" />
         <title>Phaser!</title>
-        <!--script src="js/phaser.js"></script-->
-        <script src="js/phaser.2.2.2.box2d_restored.js"></script>
+        <script src="js/phaser.js"></script>
+        <!--script src="js/phaser.2.2.2.box2d_restored.js"></script-->
         <!--script src="js/phaser.2.2.2.box2d.min.js"></script-->
-        <script src="js/jquery.js"></script>
+       
         <!--script src="js/treequery.js"></script-->
-        <script src="plugins/CameraShake.js"></script>
-        <script src="plugins/DOM_Wrapper.js"></script>
-        <script src="DOM_plugin_example/hanging_video.js"></script>
-        <!--script src="engine.js"></script-->
+        
+    
+        <script>
+        
+        
+var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { create: create, update: update, render: render });
+
+var rectA;
+var rectB;
+
+function create() {
+
+    rectA = new Phaser.Rectangle(0, 0, 200, 100);
+    rectB = new Phaser.Rectangle(100, 100, 500, 400);
+
+}
+
+function update() {
+
+    rectA.x = game.input.activePointer.x;
+    rectA.y = game.input.activePointer.y;
+
+}
+
+function render() {
+
+    game.debug.geom(rectA, 'rgba(200,0,0,0.5)');
+    game.debug.geom(rectB, 'rgba(0,0,255,0.5)');
+
+    var intersects = Phaser.Rectangle.intersection(rectA, rectB);
+
+    game.debug.geom(intersects, 'rgba(255,0,0,1)');
+
+}        
+        
+        
+        
+        
+        
+        
+        
+        
+        </script>
     </head>
     <style>
         body, html { margin: 0px; }
-        #phaser-example {
-            display: inline-block;
-            height: 600px;
-            width: 800px;
-        }
     </style>
     <body>
-        <div id="phaser-example"></div>
     </body>
 </html>
