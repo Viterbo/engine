@@ -30,7 +30,7 @@ window.onload = function() {
         
         // html = "<div style='width:100%; height: 100%; border: 1px solid black; display: inline-block'></div>";
         html = part_1 + "I53HDr0-Qew" + part_2;
-        dom = new DOM_Wrapper(html, game, 500, 700);
+        dom = new DOM_Wrapper(game, html, 500, 700);
         dom.width = 300;
         dom.height = 200;
     }

@@ -50,7 +50,7 @@ function create() {
         spriteA.body.static = true;
         
         // Dynamic box
-        var spriteB = new DOM_Wrapper(part_1 + "I53HDr0-Qew" + part_2, game, 500, 350, 200, 150, 0.5, 0.5);        
+        var spriteB = new DOM_Wrapper(game, part_1 + "I53HDr0-Qew" + part_2, 500, 350, 200, 150, 0.5, 0.5);        
         game.physics.box2d.enable(spriteB);
         
         //bodyA, bodyB, length, ax, ay, bx, by, frequency, damping
