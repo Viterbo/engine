@@ -1,8 +1,16 @@
 // asdasdsd
-Phaser.Plugin.JSON2Game = function(game, parent) {
+Phaser.Plugin.JSON2Game = function(game, parent, settings) {    
     Phaser.Plugin.call(this, game, parent);
     //settings by default
-    this._default = {};
+    
+    var def = (typeof $ == "function" && typeof $.Deferred == "function") ?
+                 $.Deferred :
+                 (typeof jwk == "object" && typeof jwk.Deferred == "function") ?
+                     jwk.Deferred :
+                     settings.Deferred;
+    this._default = {
+        defferred:def
+    };
     this._settings = this._default;
     this._parse_JSON2Game = function (JSON2Game) {
         this._data = JSON2Game;
@@ -23,6 +31,10 @@ Phaser.Plugin.JSON2Game = function(game, parent) {
             spec.instance_name = name; 
             var state = new Phaser.Plugin.JSON2Game.Scene(game, spec);
             game.state.add(name, state, spec.autostart);
+            if (spec.autostart) {
+                game.state.clearCurrentState();
+                game.state.setCurrentState(name);
+            }
             // this.scenes[name] = state;
         }
     }
@@ -70,16 +82,21 @@ Phaser.Plugin.JSON2Game.prototype.setup = function (obj) {
     this._settings = Phaser.Utils.extend(false, {}, this._default, obj);
 };
 Phaser.Plugin.JSON2Game.prototype.create = function(gamejson) {
+    var def = this._settings.defferred();
     var self = this;
     for (var name in gamejson.preload) {        
         this.game.load.image(name, gamejson.preload[name]);
     }
     this.game.load.onLoadComplete.add(function () {
         self._create.call(self, gamejson);
+        /*
+        self.game.state.getCurrentState().onCreate(function () {
+            def.resolve();
+        });*/
     }, this);
     this.game.load.start();
     
-    return this;
+    return def.promise();;
 };
 Phaser.Plugin.JSON2Game.prototype.resize = function() {
     return this._resize.apply(this, arguments);
@@ -92,6 +109,7 @@ Phaser.Plugin.JSON2Game.Base = function (game, spec) {
     this.createChildren();
     this.sortChildren();
 }
+
 Phaser.Plugin.JSON2Game.Base.prototype = {
     constructor: Phaser.Plugin.JSON2Game.Base,
     getDependencies: function () {
@@ -202,12 +220,8 @@ Phaser.Plugin.JSON2Game.Base.prototype = {
         return {x:x, y:y, ox:ox, oy:oy};
         
     },
-    setDeployment: function (dep) {        
-        this.phaserObj.width  = dep.width;
-        this.phaserObj.height = dep.height;       
-        this.phaserObj.x      = dep.x;
-        this.phaserObj.y      = dep.y;
-        return this;
+    setDeployment: function (dep) {
+        console.error("ERROR");
     },
     updateDeployment: function () {
         this.computeDeployment(true);
@@ -350,11 +364,27 @@ Phaser.Plugin.JSON2Game.Scene.prototype.resize = function () {
 Phaser.Plugin.JSON2Game.Scene.prototype.create = function () {
     this.childrenDoCreate();
     this.resize();
+    if (typeof this.onCreateCallback == "function") this.onCreateCallback();
+}
+
+Phaser.Plugin.JSON2Game.Scene.prototype.render = function () {
+    if (typeof this.onRenderCallback == "function") this.onRenderCallback();
 }
 
 Phaser.Plugin.JSON2Game.Scene.prototype.update = function () {
-    // console.log("Phaser.Plugin.JSON2Game.Scene.prototype.update");
-    // alert("update: Scene");
+    if (typeof this.onUpdateCallback == "function") this.onUpdateCallback();
+}
+
+Phaser.Plugin.JSON2Game.Scene.prototype.onCreate = function (callback) {
+    this.onCreateCallback = callback;
+}
+
+Phaser.Plugin.JSON2Game.Scene.prototype.onRender = function (callback) {
+    this.onRenderCallback = callback;
+}
+
+Phaser.Plugin.JSON2Game.Scene.prototype.onUpdate = function (callback) {
+    this.onUpdateCallback = callback;
 }
 
 // --------------------------------------------------------------------------------------
@@ -385,6 +415,7 @@ Phaser.Plugin.JSON2Game.Sprite.prototype.constructor = Phaser.Plugin.JSON2Game.S
 Phaser.Plugin.JSON2Game.Sprite.prototype.create = function () {
     // this.phaserObj = new CroppedSprite(game, 0, 0, this.spec.texture); // game.add.sprite(0, 0, this.spec.texture);
     this.phaserObj =  this.game.add.sprite(0, 0, this.spec.texture);
+    console.log("Phaser.Plugin.JSON2Game.Sprite.prototype.create() this.phaserObj: ",[ this.phaserObj]);
     this.game.add.existing(this.phaserObj);    
     
     this.cropRect  = new Phaser.Rectangle(0, 0, this.phaserObj.texture.width, this.phaserObj.texture.height);
@@ -402,6 +433,11 @@ Phaser.Plugin.JSON2Game.Sprite.prototype.create = function () {
     this.aspectRatio = this.texture.w / this.texture.h;
     //this.phaserObj.crop(this.cropRect);
     this.childrenDoCreate();
+    
+    this.phaserObj.worldTransform = new PIXI.Matrix();
+    console.log("this.phaserObj.worldTransform = new PIXI.Matrix();", [this.phaserObj.getBounds()]);
+    
+    
 }
 Phaser.Plugin.JSON2Game.Sprite.prototype.setDeployment = function (dep) {
     Phaser.Plugin.JSON2Game.Base.prototype.setDeployment.call(this, dep);
@@ -415,8 +451,11 @@ Phaser.Plugin.JSON2Game.Sprite.prototype.setDeployment = function (dep) {
     if (dep.mask) {
         this.mask.clear();
         this.mask.beginFill(0xff0000);
-        this.mask.drawRect(dep.mask.x, dep.mask.y, dep.mask.width, dep.mask.height);        
+        this.mask.drawRect(dep.mask.x, dep.mask.y, dep.mask.width, dep.mask.height);
+        this.phaserObj._bounds = new Phaser.Rectangle(dep.mask.x, dep.mask.y, dep.mask.width, dep.mask.height);
     }
+    
+    
     
 }
 Phaser.Plugin.JSON2Game.Sprite.prototype.computeDeployment = function (apply) {    

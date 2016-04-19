@@ -1,29 +1,34 @@
 {
     "classes": {
         "scene-ready-tweeners": {
-            "on": ["scene.ready"],
+            "on": [
+                "scene.ready"
+            ],
             "time": 1000
         }
     },
     "scenes": {
         "test": {
-            "A": {
-                "type": "DisplayObject",
-                "width": "100px",
-                "height": "100px",
-                "position": {
-                    "my": "top left",
-                    "at": "top left",
-                    "of": "parent"
-                },
-                "behaviors": [
-                    "FadeIn": {
-                        "class": "scene-ready-tweeners",
+            "children": {
+                "A": {
+                    "type": "BitmapData",
+                    "fillStyle": "#FFF",
+                    "width": "100%",
+                    "height": "12%",
+                    "position": {
+                        "my": "top left",
+                        "at": "top left",
+                        "of": "parent"
                     },
-                    "MoveTo": {
-                        "class": "scene-ready-tweeners",
+                    "behaviors": {
+                        "FadeIn": {
+                            "class": "scene-ready-tweeners"
+                        },
+                        "MoveTo": {
+                            "class": "scene-ready-tweeners"
+                        }
                     }
-                ]
+                }
             }
         }
     }
