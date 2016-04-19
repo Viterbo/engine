@@ -1,7 +1,6 @@
-// asdasdsd
 Phaser.Plugin.JSON2Game = function(game, parent, settings) {    
     Phaser.Plugin.call(this, game, parent);
-    //settings by default
+    DOM_Wrapper.install(game); // hay que ver como hacer esto más prolijo
     
     var def = (typeof $ == "function" && typeof $.Deferred == "function") ?
                  $.Deferred :
@@ -227,25 +226,40 @@ Phaser.Plugin.JSON2Game.Base.prototype = {
         this.computeDeployment(true);
         return this;
     },
+    computeRelativeValue: function (val, porp) {
+        if (typeof val == "string" && val.indexOf("%") != -1) {
+            var percent = parseFloat(val.substr(0, val.indexOf("%")));
+            return percent * this.parent.phaserObj[porp] / 100;
+        } else {
+            return parseInt(val);
+        }
+    },
     computeDeployment: function (apply) {
         var result = {width: 12, height: 34},
-            berofe = {};
+            berofe = {},
+            max, min;
         
         if (this.spec.width) {
-            if (typeof this.spec.width == "string" && this.spec.width.indexOf("%") != -1) {
-                var w_percent = parseFloat(this.spec.width.substr(0, this.spec.width.indexOf("%")));
-                result.width = w_percent * this.parent.phaserObj.width / 100;
-            } else {
-                result.width = parseInt(this.spec.width);
+            result.width = this.computeRelativeValue(this.spec.width, "width");
+            if (this.spec.maxWidth) {
+                max = this.computeRelativeValue(this.spec.maxWidth, "width");
+                result.width = Math.min(max, result.width);
+            }
+            if (this.spec.minWidth) {
+                min = this.computeRelativeValue(this.spec.minWidth, "width");
+                result.width = Math.max(min, result.width);
             }
         }
         
         if (this.spec.height) {
-            if (typeof this.spec.height == "string" && this.spec.height.indexOf("%") != -1) {
-                var h_percent = parseFloat(this.spec.height.substr(0, this.spec.height.indexOf("%")));
-                result.height = h_percent * this.parent.phaserObj.height / 100;
-            } else {
-                result.height = parseInt(this.spec.height);
+            result.height = this.computeRelativeValue(this.spec.height, "height");
+            if (this.spec.maxHeight) {
+                max = this.computeRelativeValue(this.spec.maxHeight, "height");
+                result.height = Math.min(max, result.height);
+            }
+            if (this.spec.minHeight) {
+                min = this.computeRelativeValue(this.spec.minHeight, "height");
+                result.height = Math.max(min, result.height);
             }
         }
         
@@ -543,6 +557,25 @@ Phaser.Plugin.JSON2Game.DOM_Wrapper = function (game, spec) {
 Phaser.Plugin.JSON2Game.DOM_Wrapper.prototype = Object.create(Phaser.Plugin.JSON2Game.Base.prototype);
 Phaser.Plugin.JSON2Game.DOM_Wrapper.prototype.constructor = Phaser.Plugin.JSON2Game.Sprite;
 Phaser.Plugin.JSON2Game.DOM_Wrapper.prototype.create = function () {
-    this.phaserObj = {width:11, height:22, x:0,y:0};
-    this.childrenDoCreate();
+    var x=0,y=0,w=200,h=150; // provisorio
+    this.phaserObj = this.game.add.domWrapper(game,spec.html,x,y,w,h);
+    this.childrenDoCreate(); 
+}
+
+// --------------------------------------------------------------------------------------
+
+Phaser.Plugin.JSON2Game.YoutubeVideo = function (game, spec) {
+    Phaser.Plugin.JSON2Game.Base.call(this, game, spec);
+}
+Phaser.Plugin.JSON2Game.YoutubeVideo.prototype = Object.create(Phaser.Plugin.JSON2Game.Base.prototype);
+Phaser.Plugin.JSON2Game.YoutubeVideo.prototype.constructor = Phaser.Plugin.JSON2Game.Sprite;
+Phaser.Plugin.JSON2Game.YoutubeVideo.prototype.create = function () {
+    var x=0,y=0,w=200,h=150; // provisorio
+    var autoplay = "autoplay=" + (this.spec.autoplay ? "1" : "0"); 
+    var fullscreen = "allowfullscreen='" + (this.spec.allowfullscreen ? "true" : "false") + "'";    
+    var part_1 ="<iframe frameborder='0' "+fullscreen+" style='height:100%; width:100%'src='https://www.youtube.com/embed/",
+        part_2 = "?feature=oembed&amp;"+autoplay+"&amp;wmode=opaque&amp;rel=0&amp;showinfo=0&amp;modestbranding=0&amp;fs=1'></iframe>";    
+    var html = part_1 + this.spec.videoid + part_2;            
+    this.phaserObj = this.game.add.domWrapper(html,x,y,w,h);
+    this.childrenDoCreate();        
 }

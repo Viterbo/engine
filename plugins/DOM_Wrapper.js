@@ -1,4 +1,4 @@
-DOM_Wrapper = function (html, game, x, y, w, h, ax, ay) {
+DOM_Wrapper = function (game, html, x, y, w, h, ax, ay) {
     console.assert(typeof html == "string" || html instanceof HTMLElement, "WARNING: html param not supperted. html passed: ", typeof html, html );
 
     //  We call the Phaser.Sprite passing in the game reference
@@ -13,7 +13,7 @@ DOM_Wrapper = function (html, game, x, y, w, h, ax, ay) {
     
     // border: 1px solid red
     this._$element = $("<div style='position: absolute; display: inline-block;'></div>").append(html).appendTo("body");
-    this._$canvas_view = $(this.game.renderer.view);    
+    this._$canvas_view = $(this.game.renderer.view);
     this.update();
 };
 
@@ -63,3 +63,20 @@ DOM_Wrapper.prototype.update = function() {
     }
     
 };
+
+// ----------------------------------------------------------------------------------
+
+DOM_Wrapper.install = function (game) {
+    game.make.domWrapper = function (html, x, y, w, h, ax, ay) {
+        return new DOM_Wrapper(this.game, html, x, y, w, h, ax, ay);
+    }
+    
+    game.add.domWrapper = function (html, x, y, w, h, ax, ay, group) {
+        if (group === undefined) { group = this.world; }
+        var obj = this.game.make.domWrapper(html, x, y, w, h, ax, ay);
+        group.add(obj);
+        return obj;
+    }
+    
+}
+if (typeof game != "undefined") DOM_Wrapper.install(game);

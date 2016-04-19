@@ -19,7 +19,7 @@
                 },
                 "frBody": {
                     "type": "BitmapData",
-                    "fillStyle": "#FAA",
+                    "fillStyle": "#00A",
                     "anchors": [
                         {
                             "my": "top left",
@@ -46,15 +46,20 @@
                             }
                         },
                         "video": {
-                            "type": "BitmapData",
-                            "fillStyle": "#F67",
-                            "youtube": "3zKoUda-WVA",
-                            "width": "90%",
-                            "height": "90%",
+                            "type": "YoutubeVideo",
+                            "videoid": "3zKoUda-WVA",                            
+                            "autoplay": "1",
+                            "allowfullscreen": "true",
+                            "maxWidth": "90%",
+                            "minWidth": "50%",
+                            "maxHeight": "90%",
+                            "minHeight": "50%",
+                            "width": "800",
+                            "height": "600",
                             "aspectRatio": "1.778",
                             "position": {
-                                "my": "middle right",
-                                "at": "middle left",
+                                "my": "middle center",
+                                "at": "middle center",
                                 "of": "parent"
                             }
                         }
