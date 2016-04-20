@@ -1,35 +1,87 @@
 {
-    "classes": {
-        "scene-ready-tweeners": {
-            "on": [
-                "scene.ready"
-            ],
-            "time": 1000
-        }
+    "preload": {
+        "background":"images/Luis-Suarez-uruguay-best-striker.jpg"
     },
     "scenes": {
-        "test": {
+        "card": {
+            "autostart": true,
             "children": {
-                "A": {
+                "frTop": {
                     "type": "BitmapData",
-                    "fillStyle": "#FFF",
+                    "fillStyle": "#000",
                     "width": "100%",
                     "height": "12%",
                     "position": {
                         "my": "top left",
                         "at": "top left",
                         "of": "parent"
-                    },
-                    "behaviors": {
-                        "FadeIn": {
-                            "class": "scene-ready-tweeners"
+                    }
+                },
+                "frBody": {
+                    "type": "BitmapData",
+                    "fillStyle": "#00A",
+                    "anchors": [
+                        {
+                            "my": "top left",
+                            "at": "bottom left",
+                            "of": "parent.frTop"
                         },
-                        "MoveTo": {
-                            "class": "scene-ready-tweeners"
+                        {
+                            "my": "bottom right",
+                            "at": "top right",
+                            "of": "parent.frBottom"
                         }
+                    ],
+                    "children": {
+                        "background": {
+                                    "type": "BitmapData",
+                                    "fillStyle": "#020",                            
+                                    "texture_": "background",
+                            "width": "100%",
+                            "height": "100%",
+                            "texture-size": "cover",
+                            "position": {
+                                "my": "top left",
+                                "at": "top left",
+                                "of": "parent"
+                            }
+                        },
+                        "video": {
+                            "type": "YoutubeVideo",
+                            "videoid": "3zKoUda-WVA",                            
+                            "autoplay": "1",
+                            "allowfullscreen": "true",
+                            
+                                    "type_": "BitmapData",
+                                    "fillStyle": "#220",                                    
+                            
+                            "maxWidth": "90%",
+                            "minWidth": "50%",
+                            "maxHeight": "90%",
+                            "minHeight": "50%",
+                            "width": "800",
+                            "height": "600",
+                            "aspectRatio": "1.778",
+                            "position": {
+                                "my": "middle center",
+                                "at": "middle center",
+                                "of": "parent"
+                            }
+                        }                        
+                    }
+                },
+                "frBottom": {
+                    "type": "BitmapData",
+                    "fillStyle": "#000",
+                    "width": "100%",
+                    "height": "5%",
+                    "position": {
+                        "my": "bottom left",
+                        "at": "bottom left",
+                        "of": "parent"
                     }
                 }
-            }
+            }            
         }
     }
 }

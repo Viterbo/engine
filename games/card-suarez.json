@@ -34,10 +34,10 @@
                     ],
                     "children": {
                         "background": {
-                            "type": "Sprite",                            
+                            "type": "Sprite",
+                            "texture": "background",
                             "width": "100%",
                             "height": "100%",
-                            "texture": "background",
                             "texture-size": "cover",
                             "position": {
                                 "my": "top left",

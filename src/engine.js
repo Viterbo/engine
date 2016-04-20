@@ -1,5 +1,6 @@
-LightSaber.Engine = function (spec) {
+LightSaber.Engine = function (spec, callbacks) {
     this._spec = spec;
+    this._callbacks = callbacks;
     this._boot_deferred = jwk.Deferred();
     this._boot_deferred_pending = true;
     var self = this;
@@ -27,15 +28,19 @@ LightSaber_Engine_prototype = {
         this._game.stage.width = width;
         this._game.stage.height = height;
         
+        for (var i in this._scenes) {
+             this._scenes[i].resize();            
+        }
+        
     },
     _ls_start: function (){
         console.log("_ls_start");
         
-        this._game = new Phaser.Game(
-            this._spec.width, this._spec.height,
-            Phaser.AUTO, this._spec.container_id);    
+        this._game = new Phaser.Game(this._spec.width, this._spec.height, Phaser.AUTO, this._spec.container_id);        
         this._game.state.add( 'LightSaber', this );
-        this._game.state.start( 'LightSaber' );        
+        this._game.state.start( 'LightSaber' );
+        
+        // LightSaber.DOM_Wrapper.install(this._game);
         return this._boot_deferred.promise();
     },
     preload: function () {
@@ -45,13 +50,14 @@ LightSaber_Engine_prototype = {
         }        
     },    
     _create_scenes:function () {        
-        console.log("_create_scenes()");        
+        console.log("_create_scenes()");
+        this._scenes = [];
         for (var name in this._data.scenes) {
             console.log(name, this._data.scenes[name]);
             var spec = this._data.scenes[name];
             spec.instance_name = name; 
-            var state = new LightSaber.Scene(this.game, spec);
-            
+            var scene = new LightSaber.Scene(this.game, spec);
+            this._scenes.push(scene);
             
             
             
@@ -84,14 +90,23 @@ LightSaber_Engine_prototype = {
             this._create_scenes();            
         } else {
             console.warn("WARNING: this._data not set properly");
-        };                
+        };        
+        if (typeof this._callbacks.create == "function") {
+            this._callbacks.create(this._game);            
+        }
     },
     render: function () {
-        // console.log("render()");        
+        //console.log("render()");        
+        if (typeof this._callbacks.render == "function") {
+            this._callbacks.render(this._game);            
+        }        
     },
     update: function () {
-        // console.log("update()");
+        //console.log("update()");
         if (this._boot_deferred_pending) this._boot_deferred.resolve();
+        if (typeof this._callbacks.update == "function") {
+            this._callbacks.update(this._game);            
+        }        
     },
     resize: function () {
         console.log("resize()");        

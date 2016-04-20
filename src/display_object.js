@@ -2,9 +2,11 @@ LightSaber.DisplayObject = function (game,spec,parent) {
     Phaser.Sprite.call(this, game, 0, 0, spec.texture);
     this.game = game;
     this.spec = spec;
+    this.instance_name = spec.instance_name;
     this._ls_parent = parent;
     if (parent) {
-        parent.addChild(this);
+        // parent.addChild(this);
+        this.game.world.addChild(this);
     }
     this.createChildren();
     this.sortChildren();
@@ -122,7 +124,8 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         
     },
     setDeployment: function (dep) {
-        console.error("ERROR");
+        this.setSize(dep);
+        this.setPosition(dep);
     },
     updateDeployment: function () {
         this.computeDeployment(true);

@@ -13,9 +13,10 @@ var LightSaber = {
     },
     create: function (spec) {
         this.clear();
-        this._engine = new LightSaber.Engine(spec);
+        this._engine = new LightSaber.Engine(spec, this._settings);
         this._engine._ls_start().done(function (){
             if (LightSaber._settings.auto_resize) {
+                LightSaber._engine._game.renderer.autoResize = true;
                 window.onresize = LightSaber.resize;
                 LightSaber.resize();
             }            

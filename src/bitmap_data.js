@@ -21,11 +21,11 @@ LightSaber.BitmapData.prototype = jwk.extend(Object.create(LightSaber.DisplayObj
         console.error("ERROR");
         this.bmd.width  = dep.width;
         this.bmd.height = dep.height;
-        LightSaber.DislayObject.prototype.setDeployment.call(this, dep);
+        LightSaber.DisplayObject.prototype.setDeployment.call(this, dep);
     },
     setSize: function (size) {
         this.bmd.width  = size.width;
         this.bmd.height = size.height;
-        LightSaber.DislayObject.prototype.setSize.call(this, size);
+        LightSaber.DisplayObject.prototype.setSize.call(this, size);
     }    
 });
