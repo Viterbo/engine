@@ -1,4 +1,4 @@
-jwk.ajax({url:"games/prueba.json"}).done(function (json) {
+jwk.ajax({url:"games/card-suarez.json"}).done(function (json) {
     LightSaber.init({
         spec: json,
         full_document: true,

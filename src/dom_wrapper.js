@@ -15,7 +15,7 @@ LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayOb
             this._last_parent_y != this.parent.y ||
             this._last_self_x != this.x ||
             this._last_self_y != this.y
-           ) {
+           ) {            
             this._last_parent_x = this.parent.x;
             this._last_parent_y = this.parent.y;
             this._last_self_x = this.x;
@@ -23,6 +23,7 @@ LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayOb
             offset = this._$canvas_view.offset();
             offset.top += this.y + this.parent.y;
             offset.left += this.x + this.parent.x;
+            console.log("offset:",offset);
             this._$element[0].style.top = offset.top+"px";
             this._$element[0].style.left = offset.left+"px";
             //console.log("offset: ", offset);
@@ -34,6 +35,7 @@ LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayOb
            ) {
             this._last_width = this.width;
             this._last_height = this.height;
+            console.log("width:",this.width,"height:", this.height);
             this._$element.width(this.width);
             this._$element.height(this.height);
             //console.log("w,h: ", this.width, this.height);
