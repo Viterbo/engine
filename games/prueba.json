@@ -5,6 +5,9 @@
     "scenes": {
         "card": {
             "autostart": true,
+            "sections": {
+                
+            },
             "children": {
                 "frTop": {
                     "type": "BitmapData",
@@ -49,7 +52,7 @@
                         "video": {
                             "type": "YoutubeVideo",
                             "videoid": "3zKoUda-WVA",                            
-                            "autoplay": "1",
+                            "autoplay": false,
                             "allowfullscreen": "true",
                             
                                     "type_": "BitmapData",

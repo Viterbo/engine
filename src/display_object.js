@@ -144,6 +144,26 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             }
         }
         
+        if (this.spec.maxWidth) {
+            if (typeof this.spec.maxWidth == "string" && this.spec.maxWidth.indexOf("%") != -1) {
+                var w_percent = parseFloat(this.spec.maxWidth.substr(0, this.spec.maxWidth.indexOf("%")));
+                result.maxWidth = w_percent * this._ls_parent.width / 100;
+            } else {
+                result.maxWidth = parseInt(this.spec.maxWidth);
+            }
+            result.width = Math.min(result.maxWidth, result.width);
+        }
+        
+        if (this.spec.minWidth) {
+            if (typeof this.spec.minWidth == "string" && this.spec.minWidth.indexOf("%") != -1) {
+                var w_percent = parseFloat(this.spec.minWidth.substr(0, this.spec.minWidth.indexOf("%")));
+                result.minWidth = w_percent * this._ls_parent.width / 100;
+            } else {
+                result.minWidth = parseInt(this.spec.minWidth);
+            }
+            result.width = Math.max(result.minWidth, result.width);
+        }
+                
         if (this.spec.height) {
             if (typeof this.spec.height == "string" && this.spec.height.indexOf("%") != -1) {
                 var h_percent = parseFloat(this.spec.height.substr(0, this.spec.height.indexOf("%")));
@@ -151,6 +171,26 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             } else {
                 result.height = parseInt(this.spec.height);
             }
+        }
+        
+        if (this.spec.maxHeight) {
+            if (typeof this.spec.maxHeight == "string" && this.spec.maxHeight.indexOf("%") != -1) {
+                var h_percent = parseFloat(this.spec.maxHeight.substr(0, this.spec.maxHeight.indexOf("%")));
+                result.maxHeight = h_percent * this._ls_parent.height / 100;
+            } else {
+                result.maxHeight = parseInt(this.spec.maxHeight);
+            }
+            result.height = Math.min(result.maxHeight, result.height);
+        }
+        
+        if (this.spec.minHeight) {
+            if (typeof this.spec.minHeight == "string" && this.spec.minHeight.indexOf("%") != -1) {
+                var h_percent = parseFloat(this.spec.minHeight.substr(0, this.spec.minHeight.indexOf("%")));
+                result.minHeight = h_percent * this._ls_parent.height / 100;
+            } else {
+                result.minHeight = parseInt(this.spec.minHeight);
+            }
+            result.height = Math.max(result.minHeight, result.height);
         }
         
         if (apply) {

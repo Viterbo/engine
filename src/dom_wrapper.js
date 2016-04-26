@@ -1,5 +1,5 @@
 LightSaber.DOM_Wrapper = function (game, spec, parent) {    
-    LightSaber.DisplayObject.call(this, game, spec, parent);        
+    LightSaber.DisplayObject.call(this, game, spec, parent);
 };
 
 LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayObject.prototype), {
@@ -49,6 +49,9 @@ LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayOb
                 "rotate(" + this.angle + "deg) translate("+(-x)+"%,"+(-y)+"%)";                             
             this._$element[0].style.transform = t;        
         }    
+    },
+    resize: function (){
+        LightSaber.DisplayObject.prototype.resize.call(this);
     }
 });
 
