@@ -1,56 +1,111 @@
 {
-    "preload": {
-        "background":"images/Luis-Suarez-uruguay-best-striker.jpg"
-    },
     "class": {
         "big-block": {
             "type": "BitmapData",
             "width": "50%",
-            "height": "50%"            
+            "height": "50%"
         },
         "block": {
             "type": "BitmapData",
             "width": "10%",
-            "height": "10%"            
+            "height": "10%"
         }
     },
-    "scenes": {
-        "card": {
-            "autostart": true,
-            "children": {
+    "scene": {
+        "autostart": true,
+        "sections": {
+            "/": {
                 "btn_1": {
-                    "class": "block",
-                    "fillStyle": "#F00",
+                    "position": {
+                        "my": "top left",
+                        "at": "top left",
+                        "of": "parent"
+                    }
                 },
                 "btn_2": {
-                    "class": "block",
-                    "fillStyle": "#FF0",
+                    "position": {
+                        "my": "top left",
+                        "at": "top right",
+                        "of": "parent.btn_1"
+                    }
                 },
                 "btn_3": {
-                    "class": "block",
-                    "fillStyle": "#F0F",
+                    "position": {
+                        "my": "top left",
+                        "at": "top right",
+                        "of": "parent.btn_2"
+                    }
                 },
                 "btn_4": {
-                    "class": "block",
-                    "fillStyle": "#0F0",
+                    "position": {
+                        "my": "top left",
+                        "at": "top right",
+                        "of": "parent.btn_3"
+                    }
                 },
                 "body_1": {
-                    "class": "big-block",
-                    "fillStyle": "#700"
+                    "position": {
+                        "my": "middle center",
+                        "at": "middle center",
+                        "of": "parent"
+                    }
                 },
                 "body_2": {
-                    "class": "big-block",
-                    "fillStyle": "#770"
+                    "position": {
+                        "my": "middle left",
+                        "at": "middle right",
+                        "of": "parent"
+                    }
                 },
                 "body_3": {
-                    "class": "big-block",
-                    "fillStyle": "#707"
+                    "position": {
+                        "my": "middle left",
+                        "at": "middle right",
+                        "of": "parent"
+                    }
                 },
                 "body_4": {
-                    "class": "big-block",
-                    "fillStyle": "#070"
+                    "position": {
+                        "my": "middle left",
+                        "at": "middle right",
+                        "of": "parent"
+                    }
                 }
-            }            
-        }
+            }
+        }, 
+        "children": {
+            "btn_1": {
+                "class": "block",
+                "fillStyle": "#F00"
+            },
+            "btn_2": {
+                "class": "block",
+                "fillStyle": "#FF0"
+            },
+            "btn_3": {
+                "class": "block",
+                "fillStyle": "#F0F"
+            },
+            "btn_4": {
+                "class": "block",
+                "fillStyle": "#0F0"
+            },
+            "body_1": {
+                "class": "big-block",
+                "fillStyle": "#700"
+            },
+            "body_2": {
+                "class": "big-block",
+                "fillStyle": "#770"
+            },
+            "body_3": {
+                "class": "big-block",
+                "fillStyle": "#707"
+            },
+            "body_4": {
+                "class": "big-block",
+                "fillStyle": "#070"
+            }
+        }        
     }
 }

@@ -1,9 +1,10 @@
-LightSaber.Engine = function (spec, callbacks) {
+LightSaber.Engine = function (spec, saber) {
     this._spec = spec;
-    this._callbacks = callbacks;
+    this._callbacks = spec.callbacks;
     this._boot_deferred = jwk.Deferred();
     this._boot_deferred_pending = true;
     var self = this;
+    this.saber = saber;
     this._boot_deferred.promise().done(function(){
         self._boot_deferred_pending = false;
     });
@@ -28,18 +29,16 @@ LightSaber_Engine_prototype = {
         this._game.stage.width = width;
         this._game.stage.height = height;
         
-        for (var i in this._scenes) {
-             this._scenes[i].resize();            
-        }
+        this.scene.resize();
         
     },
     _ls_start: function (){
         console.log("_ls_start");
         
         this._game = new Phaser.Game(this._spec.width, this._spec.height, Phaser.AUTO, this._spec.container_id);        
+        this._game.saber = this.saber;
         this._game.state.add( 'LightSaber', this );
         this._game.state.start( 'LightSaber' );
-        
         // LightSaber.DOM_Wrapper.install(this._game);
         return this._boot_deferred.promise();
     },
@@ -49,27 +48,16 @@ LightSaber_Engine_prototype = {
             this.game.load.image(name, this._spec.preload[name]);
         }        
     },    
-    _create_scenes:function () {        
-        console.log("_create_scenes()");
-        this._scenes = [];
-        for (var name in this._data.scenes) {
-            console.log(name, this._data.scenes[name]);
-            var spec = this._data.scenes[name];
-            spec.instance_name = name; 
-            var scene = new LightSaber.Scene(this.game, spec);
-            this._scenes.push(scene);
-            
-            
-            
-            /*
-            game.state.add(name, state, spec.autostart);
-            if (spec.autostart) {
-                //game.state.clearCurrentState();
-                //game.state.setCurrentState(name);
-            }
-            // this.scenes[name] = state;
-            */
-        }        
+    _ls_update_spec:function () {
+        this.scene.update_spec();
+        /*for (var i in this._scenes) {
+            var scene = this._scenes[i];
+            scene.update_spec();
+        } */        
+    },    
+    _create_scene:function () {        
+        console.log("_create_scene()");    
+        this.scene = new LightSaber.Scene(this.game, this._data.scene);
     },
     _parse_gamejson:function (gamejson) {
         this._data = gamejson;
@@ -82,12 +70,12 @@ LightSaber_Engine_prototype = {
             }
         }
         return true;
-    },
+    },  
     create: function () {
         console.log("create()", this._spec);        
         if (this._parse_gamejson(this._spec)) {
             console.assert(this._data, "ERROR: this._data not set");
-            this._create_scenes();            
+            this._create_scene();            
         } else {
             console.warn("WARNING: this._data not set properly");
         };        
