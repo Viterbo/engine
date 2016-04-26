@@ -2,6 +2,7 @@ LightSaber.DisplayObject = function (game,spec,parent) {
     Phaser.Sprite.call(this, game, 0, 0, spec.texture);
     this.game = game;
     this.spec = spec;
+    this.data = spec;
     this.instance_name = spec.instance_name;
     this._ls_parent = parent;
     if (parent) {
@@ -17,12 +18,12 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
     constructor: LightSaber.DisplayObject,
     getDependencies: function () {
         var result = [];
-        if (this.spec.position) {
-            result.push(this.spec.position.of);
+        if (this.data.position) {
+            result.push(this.data.position.of);
         }
-        if (this.spec.anchors) {
-            for (var i in this.spec.anchors) {
-                result.push(this.spec.anchors[i].of);
+        if (this.data.anchors) {
+            for (var i in this.data.anchors) {
+                result.push(this.data.anchors[i].of);
             }            
         }        
         return result;
@@ -60,18 +61,27 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         this._ls_children = new_order;
     },
     createChildren: function () {
-        console.assert(this.spec, "ERROR: this.spec does't exist");
+        console.assert(this.data, "ERROR: this.data does't exist");
         this._ls_children = [];
-        for (var name in this.spec.children) {
-            var child_spec = this.spec.children[name];
+        for (var name in this.data.children) {            
+            var child_spec = this.data.children[name];
+            child_spec.instance_name = name;  
+            child_spec = this.game.saber.extend_spec(child_spec);
             var child = null;
             var constructor = LightSaber[child_spec.type];
             console.assert(constructor, "ERROR: type not found: ", child_spec.type, [child_spec]);
-            child_spec.instance_name = name;            
             child = new constructor(this.game, child_spec, this);
             child._ls_parent = this;            
             this._ls_children.push(child);
         }
+    },
+    update_spec: function() {
+        console.assert(this._ls_children, "ERROR: this._ls_children does't exist");
+        this.data = this.game.saber.extend_spec(this.spec);
+        for (var i=0; i<this._ls_children.length; i++) {
+            this._ls_children[i].update_spec();
+            // this._ls_children[i].childrenDoCreate();
+        }        
     },
     childrenDoCreate: function() {
         console.assert(this._ls_children, "ERROR: this._ls_children does't exist");
@@ -98,6 +108,9 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             case "top":    oy = 0;   break;
             case "middle": oy = 0.5; break;
             case "bottom": oy = 1;   break;
+            case "center": oy = 0.5;
+                console.error("ERROR: use 'middle' instead of 'center' for vertical aligment");
+                break;
             default:
                 if (parts[0].indexOf("%") != -1) {
                     oy = parseInt(parts[0].substr(0, parts[0].indexOf("%"))) * 0.01;
@@ -135,60 +148,61 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         var result = {width: 12, height: 34},
             berofe = {};
         
-        if (this.spec.width) {
-            if (typeof this.spec.width == "string" && this.spec.width.indexOf("%") != -1) {
-                var w_percent = parseFloat(this.spec.width.substr(0, this.spec.width.indexOf("%")));
+        if (this.data.width) {
+            if (typeof this.data.width == "string" && this.data.width.indexOf("%") != -1) {
+                var w_percent = parseFloat(this.data.width.substr(0, this.data.width.indexOf("%")));
                 result.width = w_percent * this._ls_parent.width / 100;
             } else {
-                result.width = parseInt(this.spec.width);
+                result.width = parseInt(this.data.width);
             }
         }
         
-        if (this.spec.maxWidth) {
-            if (typeof this.spec.maxWidth == "string" && this.spec.maxWidth.indexOf("%") != -1) {
-                var w_percent = parseFloat(this.spec.maxWidth.substr(0, this.spec.maxWidth.indexOf("%")));
+        if (this.data.maxWidth) {
+            if (typeof this.data.maxWidth == "string" && this.data.maxWidth.indexOf("%") != -1) {
+                var w_percent = parseFloat(this.data.maxWidth.substr(0, this.data.maxWidth.indexOf("%")));
                 result.maxWidth = w_percent * this._ls_parent.width / 100;
             } else {
-                result.maxWidth = parseInt(this.spec.maxWidth);
+                result.maxWidth = parseInt(this.data.maxWidth);
             }
             result.width = Math.min(result.maxWidth, result.width);
         }
         
-        if (this.spec.minWidth) {
-            if (typeof this.spec.minWidth == "string" && this.spec.minWidth.indexOf("%") != -1) {
-                var w_percent = parseFloat(this.spec.minWidth.substr(0, this.spec.minWidth.indexOf("%")));
+        if (this.data.minWidth) {
+            if (typeof this.data.minWidth == "string" && this.data.minWidth.indexOf("%") != -1) {
+                var w_percent = parseFloat(this.data.minWidth.substr(0, this.data.minWidth.indexOf("%")));
                 result.minWidth = w_percent * this._ls_parent.width / 100;
             } else {
-                result.minWidth = parseInt(this.spec.minWidth);
+                result.minWidth = parseInt(this.data.minWidth);
             }
             result.width = Math.max(result.minWidth, result.width);
         }
                 
-        if (this.spec.height) {
-            if (typeof this.spec.height == "string" && this.spec.height.indexOf("%") != -1) {
-                var h_percent = parseFloat(this.spec.height.substr(0, this.spec.height.indexOf("%")));
+        if (this.data.height) {
+            if (typeof this.data.height == "string" && this.data.height.indexOf("%") != -1) {
+                var h_percent = parseFloat(this.data.height.substr(0, this.data.height.indexOf("%")));
+
                 result.height = h_percent * this._ls_parent.height / 100;
             } else {
-                result.height = parseInt(this.spec.height);
+                result.height = parseInt(this.data.height);
             }
         }
         
-        if (this.spec.maxHeight) {
-            if (typeof this.spec.maxHeight == "string" && this.spec.maxHeight.indexOf("%") != -1) {
-                var h_percent = parseFloat(this.spec.maxHeight.substr(0, this.spec.maxHeight.indexOf("%")));
+        if (this.data.maxHeight) {
+            if (typeof this.data.maxHeight == "string" && this.data.maxHeight.indexOf("%") != -1) {
+                var h_percent = parseFloat(this.data.maxHeight.substr(0, this.data.maxHeight.indexOf("%")));
                 result.maxHeight = h_percent * this._ls_parent.height / 100;
             } else {
-                result.maxHeight = parseInt(this.spec.maxHeight);
+                result.maxHeight = parseInt(this.data.maxHeight);
             }
             result.height = Math.min(result.maxHeight, result.height);
         }
         
-        if (this.spec.minHeight) {
-            if (typeof this.spec.minHeight == "string" && this.spec.minHeight.indexOf("%") != -1) {
-                var h_percent = parseFloat(this.spec.minHeight.substr(0, this.spec.minHeight.indexOf("%")));
+        if (this.data.minHeight) {
+            if (typeof this.data.minHeight == "string" && this.data.minHeight.indexOf("%") != -1) {
+                var h_percent = parseFloat(this.data.minHeight.substr(0, this.data.minHeight.indexOf("%")));
                 result.minHeight = h_percent * this._ls_parent.height / 100;
             } else {
-                result.minHeight = parseInt(this.spec.minHeight);
+                result.minHeight = parseInt(this.data.minHeight);
             }
             result.height = Math.max(result.minHeight, result.height);
         }
@@ -202,23 +216,23 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             }
         }
         
-        if (this.spec.position) {
-            console.assert(typeof this.spec.position.of == "string", "ERROR: position MUST have a 'of' attribute referencing a valid object");
-            console.assert(typeof this.spec.position.at == "string", "ERROR: position MUST have a 'at' attribute referencing a valid object");
+        if (this.data.position) {
+            console.assert(typeof this.data.position.of == "string", "ERROR: position MUST have a 'of' attribute referencing a valid object");
+            console.assert(typeof this.data.position.at == "string", "ERROR: position MUST have a 'at' attribute referencing a valid object");
             var refobj = this._ls_parent;
-            var index = this.spec.position.of.indexOf("parent.");
+            var index = this.data.position.of.indexOf("parent.");
             if (index != -1) {
-                refobj = this._ls_parent.getChild(this.spec.position.of.substr("parent.".length));
+                refobj = this._ls_parent.getChild(this.data.position.of.substr("parent.".length));
             }            
             this.y = this.x = 0;            
-            var my_coords = this.translateToCoords(this.spec.position.my);
-            var at_coords = refobj.translateToCoords(this.spec.position.at);
+            var my_coords = this.translateToCoords(this.data.position.my);
+            var at_coords = refobj.translateToCoords(this.data.position.at);
             result.x = at_coords.x - my_coords.x;
             result.y = at_coords.y - my_coords.y;
         }
 
-        if (this.spec.anchors) {
-            console.assert(this.spec.anchors.length == 2, "ERROR: anchors MUST be an array-like object width 2 objects containing {my, at, of} map each");
+        if (this.data.anchors) {
+            console.assert(this.data.anchors.length == 2, "ERROR: anchors MUST be an array-like object width 2 objects containing {my, at, of} map each");
             var refobj = [this._ls_parent,this._ls_parent],
                 index = [],
                 my_coords=[],
@@ -226,12 +240,12 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             
             this.y = this.x = 0;        
             for (var i=0;i<2;i++) {
-                index[i] = this.spec.anchors[i].of.indexOf("parent.");
+                index[i] = this.data.anchors[i].of.indexOf("parent.");
                 if (index[i] != -1) {
-                    refobj[i] = this._ls_parent.getChild(this.spec.anchors[i].of.substr("parent.".length));
+                    refobj[i] = this._ls_parent.getChild(this.data.anchors[i].of.substr("parent.".length));
                 }            
-                my_coords[i] = this.translateToCoords(this.spec.anchors[i].my);
-                at_coords[i] = refobj[i].translateToCoords(this.spec.anchors[i].at);
+                my_coords[i] = this.translateToCoords(this.data.anchors[i].my);
+                at_coords[i] = refobj[i].translateToCoords(this.data.anchors[i].at);
             }
             
             /*

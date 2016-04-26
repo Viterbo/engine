@@ -1,90 +1,163 @@
 {
-    "preload": {
-        "background":"images/Luis-Suarez-uruguay-best-striker.jpg"
+    "class": {
+        "big-block": {
+            "type": "BitmapData",
+            "width": "50%",
+            "height": "50%"
+        },
+        "block": {
+            "type": "BitmapData",
+            "width": "10%",
+            "height": "10%"
+        }
     },
-    "scenes": {
-        "card": {
-            "autostart": true,
-            "sections": {
-                
-            },
-            "children": {
-                "frTop": {
-                    "type": "BitmapData",
-                    "fillStyle": "#000",
-                    "width": "100%",
-                    "height": "12%",
+    "scene": {
+        "autostart": true,
+        "sections": {
+            "/": {
+                "btn_1": {
                     "position": {
                         "my": "top left",
                         "at": "top left",
                         "of": "parent"
                     }
-                },
-                "frBody": {
-                    "type": "BitmapData",
-                    "fillStyle": "#00A",
-                    "anchors": [
-                        {
-                            "my": "top left",
-                            "at": "bottom left",
-                            "of": "parent.frTop"
-                        },
-                        {
-                            "my": "bottom right",
-                            "at": "top right",
-                            "of": "parent.frBottom"
-                        }
-                    ],
-                    "children": {
-                        "background": {
-                                    "type": "BitmapData",
-                                    "fillStyle": "#020",                            
-                                    "texture_": "background",
-                            "width": "100%",
-                            "height": "100%",
-                            "texture-size": "cover",
-                            "position": {
-                                "my": "top left",
-                                "at": "top left",
-                                "of": "parent"
-                            }
-                        },
-                        "video": {
-                            "type": "YoutubeVideo",
-                            "videoid": "3zKoUda-WVA",                            
-                            "autoplay": false,
-                            "allowfullscreen": "true",
-                            
-                                    "type_": "BitmapData",
-                                    "fillStyle": "#220",                                    
-                            
-                            "maxWidth": "90%",
-                            "minWidth": "50%",
-                            "maxHeight": "90%",
-                            "minHeight": "50%",
-                            "width": "800",
-                            "height": "600",
-                            "aspectRatio": "1.778",
-                            "position": {
-                                "my": "middle center",
-                                "at": "middle center",
-                                "of": "parent"
-                            }
-                        }                        
+                },          
+                "btn_2": {
+                    "position": {
+                        "my": "top left",
+                        "at": "top right",
+                        "of": "parent.btn_1"
                     }
                 },
-                "frBottom": {
-                    "type": "BitmapData",
-                    "fillStyle": "#000",
-                    "width": "100%",
-                    "height": "5%",
+                "btn_3": {
                     "position": {
-                        "my": "bottom left",
-                        "at": "bottom left",
+                        "my": "top left",
+                        "at": "top right",
+                        "of": "parent.btn_2"
+                    }
+                },
+                "btn_4": {
+                    "position": {
+                        "my": "top left",
+                        "at": "top right",
+                        "of": "parent.btn_3"
+                    }
+                },
+                "body_1": {
+                    "position": {
+                        "my": "middle left",
+                        "at": "middle right",
+                        "of": "parent"
+                    }
+                },
+                "body_2": {
+                    "position": {
+                        "my": "middle left",
+                        "at": "middle right",
+                        "of": "parent"
+                    }
+                },
+                "body_3": {
+                    "position": {
+                        "my": "middle left",
+                        "at": "middle right",
+                        "of": "parent"
+                    }
+                },
+                "body_4": {
+                    "position": {
+                        "my": "middle left",
+                        "at": "middle right",
                         "of": "parent"
                     }
                 }
-            }            
-        }
+            },
+            "/btn1": {
+                "body_1": {
+                    "position": {
+                        "my": "middle center",
+                        "at": "middle center",
+                        "of": "parent"
+                    }
+                }
+            },
+            "/btn2": {
+                "body_2": {
+                    "position": {
+                        "my": "middle center",
+                        "at": "middle center",
+                        "of": "parent"
+                    }
+                }
+            },
+            "/btn3": {
+                "body_3": {
+                    "position": {
+                        "my": "middle center",
+                        "at": "middle center",
+                        "of": "parent"
+                    }
+                }
+            },
+            "/btn4": {
+                "body_4": {
+                    "position": {
+                        "my": "middle center",
+                        "at": "middle center",
+                        "of": "parent"
+                    }
+                }
+            }
+        }, 
+        "children": {
+            "btn_1": {
+                "class": "block",
+                "fillStyle": "#F00",
+                "onclick": {
+                    "handler": "scene-enter-section",
+                    "params": "/btn1"
+                }
+            },
+            "btn_2": {
+                "class": "block",
+                "fillStyle": "#FF0",
+                "onclick": {
+                    "handler": "scene-enter-section",
+                    "params": "/btn2"
+                }
+            },
+            "btn_3": {
+                "class": "block",
+                "fillStyle": "#F0F",
+                "onclick": {
+                    "handler": "scene-enter-section",
+                    "params": "/btn3"
+                }
+            },
+            "btn_4": {
+                "class": "block",
+                "fillStyle": "#0F0",
+                "onclick": {
+                    "handler": "scene-enter-section",
+                    "params": "/btn4"
+                }
+            },
+            "body_1": {
+                "class": "big-block",
+                "fillStyle": "#700"
+            },
+            "body_2": {
+                "class": "big-block",
+                "fillStyle": "#770"
+            },
+            "body_3": {
+                "class": "big-block",
+                "fillStyle": "#707"
+            },
+            "body_4": {
+                "class": "big-block",
+                "fillStyle": "#070"
+            }
+        }        
     }
 }
