@@ -98,6 +98,15 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
     update_spec: function() {
         console.assert(this._ls_children, "ERROR: this._ls_children does't exist");
         this.data = this.game.saber.extend_spec(this.spec);
+        for (var prop in this.data) {
+            if (prop in this.game.saber.tweenable_properties) {
+                if (this.data[prop] != this.state[prop]) {
+                    // console.log("Estoy agregando la prop:", prop);
+                    this.state[prop] = this.data[prop];
+                }
+                // console.log(">", this.spec.instance_name, this.state);
+            }
+        }
         for (var i=0; i<this._ls_children.length; i++) {
             this._ls_children[i].update_spec();
             // this._ls_children[i].childrenDoCreate();
@@ -312,7 +321,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         }
         this._already_set_size = !isNaN(size.width) && !isNaN(size.height);
         */
-        this._update_state_use_tween = this._update_not_first_time && !isNaN(size.width) && !isNaN(size.height);
+        this._update_state_use_tween = this._update_not_first_time && !isNaN(size.width) && !isNaN(size.height) && this.spec.tween;
         this._update_state = true;    
     },
     setPosition: function (pos) {
@@ -327,11 +336,8 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         }
         this._already_set_position = !isNaN(pos.x) && !isNaN(pos.y);
         */
-        this._update_state_use_tween = this._update_not_first_time && !isNaN(pos.x) && !isNaN(pos.y);
+        this._update_state_use_tween = this._update_not_first_time && !isNaN(pos.x) && !isNaN(pos.y) && this.spec.tween;
         this._update_state = true;
-    },
-    updateProperties: function (props) {
-        
     },
     resize: function () {
         // console.log("Phaser.Plugin.JSON2Game.base.prototype.resize");
@@ -347,7 +353,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             this._update_state = false;
             this._update_not_first_time = true;
             if (this._update_state_use_tween) {
-                var tween = this.game.add.tween(this).to( this.state, 250, Phaser.Easing.Cubic.Out, true);
+                var tween = this.game.add.tween(this).to( this.state, this.spec.tween.time, this.spec.tween.ease, true, this.spec.tween.delay);
             } else {
                 jwk.extend(this, this.state);
             }

@@ -4,6 +4,9 @@ function LightSaber(settings) {
 
 LightSaber.prototype = {
     constructor: LightSaber,
+    tweenable_properties: {
+        alpha: true
+    },
     init:function (settings) {
         this._settings = jwk.extend({
             height:600,
@@ -32,7 +35,6 @@ LightSaber.prototype = {
     clear: function () {
     },
     resize :function () {
-        console.log("resize()");
         var height = window.innerHeight;
         var width = window.innerWidth;
         if (this.engine) this.engine._ls_resize(width, height);
@@ -50,14 +52,12 @@ LightSaber.prototype = {
     create_handler: function (event_name) {
         var saber = this;
         return function (target, pointer) {
-            console.log("this.events.onInputDown()", event_name, arguments);
             switch(target.spec[event_name].handler) {
                 case "scene-enter-section":
                     saber.enter_section(target.spec[event_name].params);
                     break;
-            }            
+            }
         }        
-        
     },
     extend_spec: function (spec) {
         var self = this;
