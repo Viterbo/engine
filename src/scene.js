@@ -11,8 +11,13 @@ LightSaber.Scene = function (game, spec, parent) {
 
 LightSaber.Scene.prototype = jwk.extend(Object.create(LightSaber.DisplayObject.prototype), {
     resize: function () {
-        this.width = this.game.world.width;
-        this.height = this.game.world.height;
+        this.state = {
+            width: this.game.world.width,
+            height: this.game.world.height,
+            x: 0,
+            y: 0
+        }
+        this._update_state = true;
         for (var i in this._ls_children) {
             this._ls_children[i].resize();
         }        

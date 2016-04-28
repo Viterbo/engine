@@ -11,7 +11,7 @@ LightSaber.prototype = {
             container_id:'',
             full_document: true,
             auto_resize: true,
-            section: "/btn4"
+            section: "/"
         }, settings);
                 
         if (this._settings.spec) this.create(this._settings.spec);
@@ -45,11 +45,25 @@ LightSaber.prototype = {
     update_spec: function (spec) {
         if (this.engine) this.engine._ls_update_spec();
     },
+    // -------------------------------------------------------
     
+    create_handler: function (event_name) {
+        var saber = this;
+        return function (target, pointer) {
+            console.log("this.events.onInputDown()", event_name, arguments);
+            switch(target.spec[event_name].handler) {
+                case "scene-enter-section":
+                    saber.enter_section(target.spec[event_name].params);
+                    break;
+            }            
+        }        
+        
+    },
     extend_spec: function (spec) {
         var self = this;
         var obj = jwk.extend({}, spec);
         var class_list = [];
+        
         if (spec.class) {
             if (typeof spec.class == "string") {
                 spec.class = spec.class.split(" ");
@@ -65,6 +79,7 @@ LightSaber.prototype = {
             }
             obj.class = class_list;
         }
+        
         if (spec.instance_name && this._section && this._settings.spec.scene.sections) {
             
             function section_iterate(_section, callback) {

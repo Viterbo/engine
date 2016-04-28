@@ -3,12 +3,15 @@ LightSaber.DisplayObject = function (game,spec,parent) {
     this.game = game;
     this.spec = spec;
     this.data = spec;
+    this.state = {};
     this.instance_name = spec.instance_name;
-    this._ls_parent = parent;
+    this._ls_parent = parent;    
     if (parent) {
         // parent.addChild(this);
         this.game.world.addChild(this);
     }
+    
+    this.subscribeToEvents();
     this.createChildren();
     this.sortChildren();
 };
@@ -75,6 +78,23 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             this._ls_children.push(child);
         }
     },
+    subscribeToEvents: function () {
+        for (var name in this.spec) {
+            var event_spec = this.spec[name];
+            switch(name) {
+                case "onInputOver":
+                case "onInputDown":
+                    var handler = this.game.saber.create_handler(name, event_spec);
+                    this.inputEnabled = true;                
+                    this.events[name].add(handler, this);                    
+                    break;
+                default:
+                    if (name.indexOf("on") == 0) {
+                        console.warn("WARNING: if not an event handler, dont use 'on' as a prefix. property found: ", name);
+                    }
+            }
+        }
+    },
     update_spec: function() {
         console.assert(this._ls_children, "ERROR: this._ls_children does't exist");
         this.data = this.game.saber.extend_spec(this.spec);
@@ -115,7 +135,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
                 if (parts[0].indexOf("%") != -1) {
                     oy = parseInt(parts[0].substr(0, parts[0].indexOf("%"))) * 0.01;
                 } else {
-                    oy = parts[0] / this.height;
+                    oy = parts[0] / this.state.height;
                 }
         }
         
@@ -127,12 +147,12 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
                 if (parts[1].indexOf("%") != -1) {
                     ox = parseInt(parts[1].substr(0, parts[1].indexOf("%"))) * 0.01;
                 } else {
-                    ox = parts[1] / this.width;
+                    ox = parts[1] / this.state.width;
                 }
         }
         
-        x = this.x + this.width * ox;
-        y = this.y + this.height * oy;        
+        x = this.state.x + this.state.width * ox;
+        y = this.state.y + this.state.height * oy;        
         return {x:x, y:y, ox:ox, oy:oy};
         
     },
@@ -151,7 +171,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         if (this.data.width) {
             if (typeof this.data.width == "string" && this.data.width.indexOf("%") != -1) {
                 var w_percent = parseFloat(this.data.width.substr(0, this.data.width.indexOf("%")));
-                result.width = w_percent * this._ls_parent.width / 100;
+                result.width = w_percent * this._ls_parent.state.width / 100;
             } else {
                 result.width = parseInt(this.data.width);
             }
@@ -160,7 +180,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         if (this.data.maxWidth) {
             if (typeof this.data.maxWidth == "string" && this.data.maxWidth.indexOf("%") != -1) {
                 var w_percent = parseFloat(this.data.maxWidth.substr(0, this.data.maxWidth.indexOf("%")));
-                result.maxWidth = w_percent * this._ls_parent.width / 100;
+                result.maxWidth = w_percent * this._ls_parent.state.width / 100;
             } else {
                 result.maxWidth = parseInt(this.data.maxWidth);
             }
@@ -170,7 +190,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         if (this.data.minWidth) {
             if (typeof this.data.minWidth == "string" && this.data.minWidth.indexOf("%") != -1) {
                 var w_percent = parseFloat(this.data.minWidth.substr(0, this.data.minWidth.indexOf("%")));
-                result.minWidth = w_percent * this._ls_parent.width / 100;
+                result.minWidth = w_percent * this._ls_parent.state.width / 100;
             } else {
                 result.minWidth = parseInt(this.data.minWidth);
             }
@@ -181,7 +201,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             if (typeof this.data.height == "string" && this.data.height.indexOf("%") != -1) {
                 var h_percent = parseFloat(this.data.height.substr(0, this.data.height.indexOf("%")));
 
-                result.height = h_percent * this._ls_parent.height / 100;
+                result.height = h_percent * this._ls_parent.state.height / 100;
             } else {
                 result.height = parseInt(this.data.height);
             }
@@ -190,7 +210,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         if (this.data.maxHeight) {
             if (typeof this.data.maxHeight == "string" && this.data.maxHeight.indexOf("%") != -1) {
                 var h_percent = parseFloat(this.data.maxHeight.substr(0, this.data.maxHeight.indexOf("%")));
-                result.maxHeight = h_percent * this._ls_parent.height / 100;
+                result.maxHeight = h_percent * this._ls_parent.state.height / 100;
             } else {
                 result.maxHeight = parseInt(this.data.maxHeight);
             }
@@ -200,7 +220,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         if (this.data.minHeight) {
             if (typeof this.data.minHeight == "string" && this.data.minHeight.indexOf("%") != -1) {
                 var h_percent = parseFloat(this.data.minHeight.substr(0, this.data.minHeight.indexOf("%")));
-                result.minHeight = h_percent * this._ls_parent.height / 100;
+                result.minHeight = h_percent * this._ls_parent.state.height / 100;
             } else {
                 result.minHeight = parseInt(this.data.minHeight);
             }
@@ -211,8 +231,8 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             this.setSize(result);
         } else {
             before = {
-                x: this.x,
-                y: this.y
+                x: this.state.x,
+                y: this.state.y
             }
         }
         
@@ -224,7 +244,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             if (index != -1) {
                 refobj = this._ls_parent.getChild(this.data.position.of.substr("parent.".length));
             }            
-            this.y = this.x = 0;            
+            this.state.y = this.state.x = 0;            
             var my_coords = this.translateToCoords(this.data.position.my);
             var at_coords = refobj.translateToCoords(this.data.position.at);
             result.x = at_coords.x - my_coords.x;
@@ -276,17 +296,42 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         if (apply) {
             this.setPosition(result);
         } else {
-            this.setPosition(before);
+            this.setPosition(before);            
         }
         return result;
     },
     setSize: function (size) {
-        this.width  = size.width;
-        this.height = size.height;       
+        this.state.width  = size.width;
+        this.state.height = size.height;
+        /*
+        if (this._already_set_size) {
+            var tween = this.game.add.tween(this).to( { width:size.width, height:size.height }, 250, Phaser.Easing.Cubic.Out, true);
+        } else {
+            this.width  = size.width;
+            this.height = size.height;
+        }
+        this._already_set_size = !isNaN(size.width) && !isNaN(size.height);
+        */
+        this._update_state_use_tween = this._update_not_first_time && !isNaN(size.width) && !isNaN(size.height);
+        this._update_state = true;    
     },
     setPosition: function (pos) {
-        this.x      = pos.x;
-        this.y      = pos.y;            
+        this.state.y = pos.y;
+        this.state.x = pos.x;
+        /*
+        if (this._already_set_position) {
+            var tween = this.game.add.tween(this).to( { x:pos.x, y:pos.y }, 250, Phaser.Easing.Cubic.Out, true);
+        } else {
+            this.x = pos.x;
+            this.y = pos.y;            
+        }
+        this._already_set_position = !isNaN(pos.x) && !isNaN(pos.y);
+        */
+        this._update_state_use_tween = this._update_not_first_time && !isNaN(pos.x) && !isNaN(pos.y);
+        this._update_state = true;
+    },
+    updateProperties: function (props) {
+        
     },
     resize: function () {
         // console.log("Phaser.Plugin.JSON2Game.base.prototype.resize");
@@ -296,5 +341,16 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         }
         // console.log(this);
         //alert("resize: " + this.instance_name);
+    },
+    update: function () {
+        if (this._update_state) {
+            this._update_state = false;
+            this._update_not_first_time = true;
+            if (this._update_state_use_tween) {
+                var tween = this.game.add.tween(this).to( this.state, 250, Phaser.Easing.Cubic.Out, true);
+            } else {
+                jwk.extend(this, this.state);
+            }
+        }
     }
 });

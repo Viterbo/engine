@@ -3,7 +3,11 @@
         "big-block": {
             "type": "BitmapData",
             "width": "50%",
-            "height": "50%"
+            "height": "50%",
+            "alpha": 0,
+            "tween": {
+                
+            }
         },
         "block": {
             "type": "BitmapData",
@@ -74,6 +78,7 @@
             },
             "/btn1": {
                 "body_1": {
+                    "alpha": 1,
                     "position": {
                         "my": "middle center",
                         "at": "middle center",
@@ -83,6 +88,7 @@
             },
             "/btn2": {
                 "body_2": {
+                    "alpha": 1,
                     "position": {
                         "my": "middle center",
                         "at": "middle center",
@@ -92,6 +98,7 @@
             },
             "/btn3": {
                 "body_3": {
+                    "alpha": 1,
                     "position": {
                         "my": "middle center",
                         "at": "middle center",
@@ -101,6 +108,7 @@
             },
             "/btn4": {
                 "body_4": {
+                    "alpha": 1,
                     "position": {
                         "my": "middle center",
                         "at": "middle center",
@@ -108,12 +116,18 @@
                     }
                 }
             }
-        }, 
+        },
+        "children_": {
+            "body_1": {
+                "class": "big-block",
+                "fillStyle": "#700"
+            }            
+        },
         "children": {
             "btn_1": {
                 "class": "block",
                 "fillStyle": "#F00",
-                "onclick": {
+                "onInputDown": {
                     "handler": "scene-enter-section",
                     "params": "/btn1"
                 }
@@ -121,7 +135,7 @@
             "btn_2": {
                 "class": "block",
                 "fillStyle": "#FF0",
-                "onclick": {
+                "onInputDown": {
                     "handler": "scene-enter-section",
                     "params": "/btn2"
                 }
@@ -129,7 +143,7 @@
             "btn_3": {
                 "class": "block",
                 "fillStyle": "#F0F",
-                "onclick": {
+                "onInputDown": {
                     "handler": "scene-enter-section",
                     "params": "/btn3"
                 }
@@ -137,7 +151,7 @@
             "btn_4": {
                 "class": "block",
                 "fillStyle": "#0F0",
-                "onclick": {
+                "onInputDown": {
                     "handler": "scene-enter-section",
                     "params": "/btn4"
                 }
