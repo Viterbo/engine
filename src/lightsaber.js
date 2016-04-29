@@ -57,7 +57,7 @@ LightSaber.prototype = {
                     saber.enter_section(target.spec[event_name].params);
                     break;
             }
-        }        
+        }
     },
     extend_spec: function (spec) {
         var self = this;

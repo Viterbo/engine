@@ -48,8 +48,8 @@
                         "video": {
                             "type": "YoutubeVideo",
                             "videoid": "3zKoUda-WVA",                            
-                            "autoplay": "1",
-                            "allowfullscreen": "true",
+                            "autoplay": true,
+                            "allowfullscreen": true,
                             "maxWidth": "90%",
                             "minWidth": "50%",
                             "maxHeight": "90%",

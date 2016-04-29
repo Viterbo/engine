@@ -16,7 +16,7 @@ LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayOb
             this._last_parent_y != this.parent.y ||
             this._last_self_x != this.x ||
             this._last_self_y != this.y
-           ) {            
+           ) {
             this._last_parent_x = this.parent.x;
             this._last_parent_y = this.parent.y;
             this._last_self_x = this.x;
@@ -52,6 +52,15 @@ LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayOb
                 "rotate(" + this.angle + "deg) translate("+(-x)+"%,"+(-y)+"%)";                             
             this._$element[0].style.transform = t;        
         }
+        
+        if (this._last_alpha != this.alpha ||
+            this._last_alpha != this.alpha        
+           ) {
+            this._last_alpha = this.alpha;
+            this._$element.css("opacity", this.alpha);            
+        }
+
+        
     },
     resize: function (){
         LightSaber.DisplayObject.prototype.resize.call(this);

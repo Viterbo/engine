@@ -79,7 +79,8 @@
             },
             "/btn1": {
                 "body_1": {
-                    "alpha": 0,
+                    "autoplay": true,
+                    "alpha": 1,
                     "position": {
                         "my": "middle center",
                         "at": "middle center",
@@ -158,9 +159,23 @@
                 }
             },
             "body_1": {
-                "class": "big-block",
-                "fillStyle": "#700"
-            },
+                "type": "YoutubeVideo",
+                "videoid": "3zKoUda-WVA",                            
+                "autoplay": false,
+                "allowfullscreen": true,
+                "maxWidth": "90%",
+                "minWidth": "50%",
+                "maxHeight": "90%",
+                "minHeight": "50%",
+                "width": "800",
+                "height": "600",
+                "aspectRatio": "1.778",
+                "alpha": 0,
+                "tween": {
+                    "time": 250,
+                    "ease": "Quad.easeOut"
+                }
+           },
             "body_2": {
                 "class": "big-block",
                 "fillStyle": "#770"
