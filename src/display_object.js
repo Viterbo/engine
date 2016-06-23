@@ -1,9 +1,10 @@
 LightSaber.DisplayObject = function (game,spec,parent) {
+    console.log("spec.texture", spec.texture)
     Phaser.Sprite.call(this, game, 0, 0, spec.texture);
     this.game = game;
     this.spec = spec;
     this.data = spec;
-    this.state = {};
+    this.state = {x:0, y:0, width: 123, height: 456};
     this.instance_name = spec.instance_name;
     this._ls_parent = parent;    
     if (parent) {
@@ -174,8 +175,10 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
         return this;
     },
     computeDeployment: function (apply) {
+        console.debug("DisplayObject.computeDeployment("+  apply + ")");
+        
         var result = {width: 12, height: 34},
-            berofe = {};
+            before = {};
         
         if (this.data.width) {
             if (typeof this.data.width == "string" && this.data.width.indexOf("%") != -1) {
@@ -240,9 +243,14 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             this.setSize(result);
         } else {
             before = {
+                width: this.state.width,
+                height: this.state.height,
                 x: this.state.x,
                 y: this.state.y
             }
+            // el objeto ya tiene que tener seteado su tamaño antes de ejecutar this.translateToCoords(this.data.position.my);
+            this.state.width = result.width;
+            this.state.height = result.height;
         }
         
         if (this.data.position) {
@@ -355,6 +363,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
             if (this._update_state_use_tween) {
                 var tween = this.game.add.tween(this).to( this.state, this.spec.tween.time, this.spec.tween.ease, true, this.spec.tween.delay);
             } else {
+                console.log("this.state: ", this.state, [this]);
                 jwk.extend(this, this.state);
             }
         }

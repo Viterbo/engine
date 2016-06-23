@@ -236,7 +236,7 @@ Phaser.Plugin.JSON2Game.Base.prototype = {
     },
     computeDeployment: function (apply) {
         var result = {width: 12, height: 34},
-            berofe = {},
+            before = {},
             max, min;
         
         if (this.spec.width) {

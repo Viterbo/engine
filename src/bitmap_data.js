@@ -3,7 +3,7 @@ LightSaber.BitmapData = function (game, spec, parent) {
     this.bmd = game.make.bitmapData(layout.width, layout.height);
     this.bmd.x = this.bmd.y = 0;
     spec.texture = this.bmd;
-    LightSaber.DisplayObject.call(this, game, spec, parent);    
+    LightSaber.DisplayObject.call(this, game, spec, parent);
     this.x = layout.x;
     this.y = layout.y;       
     this.width = layout.width;
