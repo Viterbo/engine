@@ -9,15 +9,53 @@ LightSaber.Engine = function (settings, saber) {
     this._boot_deferred.promise().done(function(){
         self._boot_deferred_pending = false;
     });
+    
+    
+    
+    
+    
+    
+    
+    if (document.getElementById(this._container_id)) {
+        this._size = {height: "100%", width: "100%"}
+    } else {
+        this._size = {height: settings.height, width: settings.width}
+    }
+    
+    
+    
+    
+    
+    
 };
 LightSaber_Engine_prototype = {
     constructor: LightSaber.Engine,
-    _ls_resize:function (width, height){
+    _ls_resize:function (width, height) {
+        console.log("_ls_resize");
         var bounds = new Phaser.Rectangle(0, 0, width, height);
+        
+        var $obj = LightSaber.utils.$("#" + this._container_id);
+        if ($obj.length > 0) {
+            var pos = $obj.css("position");
+            if (pos == "absolute") {                
+                this._game.renderer.view.style.position = "absolute";
+                this._game.renderer.view.style.top = "0px";
+                this._game.renderer.view.style.left = "0px";
+            } else {
+                this._game.renderer.view.style.position = "relative";
+                this._game.renderer.view.style.height = "100%";
+                this._game.renderer.view.style.width = "100%";
+                
+                // Si el container tiene padding o algun otro modificador puede que el tamaño interno real sea diferente del calculado
+                var computed_style = window.getComputedStyle( this._game.renderer.view );
+                height = parseInt(computed_style.height);
+                width = parseInt(computed_style.width);
+            }
+        }
+        if (pos != "relative" || pos != "absolute") {
+            $obj.css("position", "relative");
+        }            
 
-        this._game.renderer.view.style.position = "absolute";
-        this._game.renderer.view.style.top = "0px";
-        this._game.renderer.view.style.left = "0px";
         this._game.renderer.resize(width, height);
         if (this._game.renderType === 1) {
             Phaser.Canvas.setSmoothingEnabled(this._game.context, false);
@@ -34,9 +72,9 @@ LightSaber_Engine_prototype = {
         
     },
     _ls_start: function (){
-        console.log("_ls_start");
+        console.debug("_ls_start --> ", this._size.width, this._size.height, Phaser.AUTO, this._container_id);
         
-        this._game = new Phaser.Game(this._spec.width, this._spec.height, Phaser.AUTO, this._container_id);        
+        this._game = new Phaser.Game(this._size.width, this._size.height, Phaser.AUTO, this._container_id);        
         this._game.saber = this.saber;
         this._game.state.add( 'LightSaber', this );
         this._game.state.start( 'LightSaber' );

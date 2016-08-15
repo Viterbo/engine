@@ -7,11 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-      "url": "https://github.com/Viterbo/engine"
-  },    
+    "url": "https://github.com/Viterbo/engine"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bower": "^1.7.9",
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-requirejs": "^1.0.0",

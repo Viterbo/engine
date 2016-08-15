@@ -21,15 +21,24 @@ LightSaber.prototype = {
         alpha: true
     },
     init:function (settings) {
-        this._settings = LightSaber.utils.extend({
-            height:600,
-            width:800,
+        var defaults = {
+            height:300,
+            width:400,
             container_id:'',
             full_document: true,
             auto_resize: true,
-            section: "/"
-        }, settings);
-                
+            section: "/",
+            callbacks: {}
+        }
+        
+        for (var prop in settings) {
+            if (typeof settings[prop] == "function") {
+                defaults.callbacks[prop] = settings[prop];
+                delete settings[prop];
+            }
+        }
+        
+        this._settings = LightSaber.utils.extend(defaults, settings);                
         if (this._settings.spec) this.create(this._settings);
         
     },
@@ -47,9 +56,18 @@ LightSaber.prototype = {
     },
     clear: function () {
     },
-    resize :function () {
-        var height = window.innerHeight;
-        var width = window.innerWidth;
+    resize :function () {        
+        var height, width;
+        if (this._settings.full_document) {
+            height = window.innerHeight;
+            width = window.innerWidth;
+        } else {
+            var $obj = LightSaber.utils.$("#" + this._settings.container_id);
+            if ($obj.length > 0) {
+                height = $obj.height();
+                width = $obj.width();
+            }            
+        }
         if (this.engine) this.engine._ls_resize(width, height);
     },
     enter_section: function (section) {

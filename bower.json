@@ -1,0 +1,33 @@
+{
+  "name": "lightsaber",
+  "main": "dist/lightsaber.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Viterbo/engine",
+  "authors": [
+    "Viterbo <viter.rod@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "lib",
+    "js",
+    "games",
+    "DOM_plugin_example",
+    "images",
+    "plugins",
+    ".bowerrc",
+    ".gitignore",
+    "app.js",
+    "Gruntfile.js",
+    "index.html",
+    "LICENSE",
+    "Notas.txt",
+    "package.json",
+    "README.md",
+    "src"
+  ],
+  "dependencies": {
+    "jwebkit.js": "jwebkit#~0.1.6"
+  }
+}

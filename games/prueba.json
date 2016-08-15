@@ -1,80 +1,28 @@
 {
-    "preload": {
-        "background":"images/Luis-Suarez-uruguay-best-striker.jpg"
-    },
     "scene": {
-
         "autostart": true,
         "children": {
-            "frTop": {
+            "header": {
                 "type": "BitmapData",
-                "fillStyle": "#000",
+                "fillStyle": "#300",
                 "width": "100%",
                 "height": "12%",
-                "position": {
-                    "my": "top left",
-                    "at": "top left",
-                    "of": "parent"
-                }
+                "position": { "my": "top left", "at": "top left", "of": "parent" }
             },
-            "frBody": {
+            "body": {
                 "type": "BitmapData",
                 "fillStyle": "#00A",
                 "anchors": [
-                    {
-                        "my": "top left",
-                        "at": "bottom left",
-                        "of": "parent.frTop"
-                    },
-                    {
-                        "my": "bottom right",
-                        "at": "top right",
-                        "of": "parent.frBottom"
-                    }
-                ],
-                "children": {
-                    "background": {
-                        "type": "Sprite",
-                        "texture": "background",
-                        "width": "100%",
-                        "height": "100%",
-                        "texture-size": "cover",
-                        "position": {
-                            "my": "top left",
-                            "at": "top left",
-                            "of": "parent"
-                        }
-                    },
-                    "video": {
-                        "type": "YoutubeVideo",
-                        "videoid": "3zKoUda-WVA",                            
-                        "autoplay": false,
-                        "allowfullscreen": "1",
-                        "maxWidth": "90%",
-                        "minWidth": "50%",
-                        "maxHeight": "90%",
-                        "minHeight": "50%",
-                        "width": "800",
-                        "height": "600",
-                        "aspectRatio": "1.778",
-                        "position": {
-                            "my": "middle center",
-                            "at": "middle center",
-                            "of": "parent"
-                        }
-                    }
-                }
+                    { "my": "top left", "at": "bottom left", "of": "parent.header" },
+                    { "my": "bottom right", "at": "top right", "of": "parent.footer" }
+                ]                
             },
-            "frBottom": {
+            "footer": {
                 "type": "BitmapData",
-                "fillStyle": "#000",
+                "fillStyle": "#030",
                 "width": "100%",
                 "height": "5%",
-                "position": {
-                    "my": "bottom left",
-                    "at": "bottom left",
-                    "of": "parent"
-                }
+                "position": { "my": "bottom left", "at": "bottom left", "of": "parent" }
             }
         }        
     }
