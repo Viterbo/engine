@@ -10,7 +10,7 @@ LightSaber.BitmapData = function (game, spec, parent) {
     this.height = layout.height;     
 };
 
-LightSaber.BitmapData.prototype = jwk.extend(Object.create(LightSaber.DisplayObject.prototype), {
+LightSaber.BitmapData.prototype = LightSaber.utils.extend(Object.create(LightSaber.DisplayObject.prototype), {
     create: function () {
         console.log("SSSSSSSSSSSSSSS");
         var pos, color = LightSaber.utils.hexToRgb(this.spec.fillStyle);

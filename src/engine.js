@@ -1,7 +1,8 @@
-LightSaber.Engine = function (spec, saber) {
-    this._spec = spec;
-    this._callbacks = spec.callbacks;
-    this._boot_deferred = jwk.Deferred();
+LightSaber.Engine = function (settings, saber) {
+    this._container_id = settings.container_id;
+    this._spec = settings.spec;
+    this._callbacks = settings.callbacks;
+    this._boot_deferred = LightSaber.utils.Deferred();
     this._boot_deferred_pending = true;
     var self = this;
     this.saber = saber;
@@ -35,7 +36,7 @@ LightSaber_Engine_prototype = {
     _ls_start: function (){
         console.log("_ls_start");
         
-        this._game = new Phaser.Game(this._spec.width, this._spec.height, Phaser.AUTO, this._spec.container_id);        
+        this._game = new Phaser.Game(this._spec.width, this._spec.height, Phaser.AUTO, this._container_id);        
         this._game.saber = this.saber;
         this._game.state.add( 'LightSaber', this );
         this._game.state.start( 'LightSaber' );

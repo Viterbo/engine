@@ -10,6 +10,6 @@ LightSaber.YoutubeVideo = function (game, spec, parent) {
     LightSaber.DOM_Wrapper.call(this, game, spec, parent);
 };
 
-LightSaber.YoutubeVideo.prototype = jwk.extend(Object.create(LightSaber.DOM_Wrapper.prototype), {
+LightSaber.YoutubeVideo.prototype = LightSaber.utils.extend(Object.create(LightSaber.DOM_Wrapper.prototype), {
     
 });

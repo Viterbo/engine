@@ -2,9 +2,9 @@ LightSaber.DOM_Wrapper = function (game, spec, parent) {
     LightSaber.DisplayObject.call(this, game, spec, parent);
 };
 
-LightSaber.DOM_Wrapper.prototype = jwk.extend(Object.create(LightSaber.DisplayObject.prototype), {
+LightSaber.DOM_Wrapper.prototype = LightSaber.utils.extend(Object.create(LightSaber.DisplayObject.prototype), {
     create: function () {
-        var $ = window.$ || window.jQuery || jwk.query || TreeQuery;
+        var $ = LightSaber.utils.$;
         this._$element = $("<div style='position: absolute; display: inline-block;'></div>").append(this.spec.html).appendTo("body");
         this._$canvas_view = $(this.game.renderer.view);    
         this.childrenDoCreate();

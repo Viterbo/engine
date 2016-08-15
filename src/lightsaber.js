@@ -2,13 +2,26 @@ function LightSaber(settings) {
     this.init(settings);
 };
 
+LightSaber.utils = {};
+LightSaber.utils.$ = window.$ 
+    || window.jQuery 
+    || (typeof angular != "undefined" ? angular.element : null)
+    || (typeof jwk != "undefined" ? jwk.query : null)
+    || window.TreeQuery;
+LightSaber.utils.Deferred = LightSaber.utils.$.Deferred 
+    || (typeof jwk != "undefined" ? jwk.Deferred : null);    
+LightSaber.utils.extend = LightSaber.utils.$.extend 
+    || (typeof angular != "undefined" ? angular.extend : null)
+    || (typeof jwk != "undefined" ? jwk.extend : null);    
+
+
 LightSaber.prototype = {
     constructor: LightSaber,
     tweenable_properties: {
         alpha: true
     },
     init:function (settings) {
-        this._settings = jwk.extend({
+        this._settings = LightSaber.utils.extend({
             height:600,
             width:800,
             container_id:'',
@@ -17,13 +30,13 @@ LightSaber.prototype = {
             section: "/"
         }, settings);
                 
-        if (this._settings.spec) this.create(this._settings.spec);
+        if (this._settings.spec) this.create(this._settings);
         
     },
-    create: function (spec) {
+    create: function (settings) {
         var saber = this;        
         this.clear();
-        this.engine = new LightSaber.Engine(jwk.extend(spec, {callbacks:this._settings}), saber);
+        this.engine = new LightSaber.Engine(settings, saber);
         this.engine._ls_start().done(function (){            
             if (saber._settings.auto_resize) {
                 saber.engine._game.renderer.autoResize = true;
@@ -61,7 +74,7 @@ LightSaber.prototype = {
     },
     extend_spec: function (spec) {
         var self = this;
-        var obj = jwk.extend({}, spec);
+        var obj = LightSaber.utils.extend({}, spec);
         var class_list = [];
         
         if (spec.class) {
@@ -74,7 +87,7 @@ LightSaber.prototype = {
                 var _class_name = spec.class[i];
                 var _class_spec = this._settings.spec.class[_class_name];
                 var _class_final = this.extend_spec(_class_spec);
-                obj = jwk.extend(obj, _class_final);
+                obj = LightSaber.utils.extend(obj, _class_final);
                 class_list.push(_class_name);
             }
             obj.class = class_list;
@@ -101,7 +114,7 @@ LightSaber.prototype = {
                 if (sec && sec[spec.instance_name]) {
                     var _section_spec = sec[spec.instance_name];
                     _section_spec = self.extend_spec(_section_spec);
-                    obj = jwk.extend(obj, _section_spec);
+                    obj = LightSaber.utils.extend(obj, _section_spec);
                 }
             });
             

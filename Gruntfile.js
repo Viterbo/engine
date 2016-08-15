@@ -11,30 +11,31 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),    
         concat: {
             options: {
-                separator: ';',
+                separator: ';\n//------------------------------------------------------\n\n\n',
             },
             lib: {
                 src: [
                     'src/wrapper_begin.js',
-                    'src/treequery.js',
-                    'src/filters.js',
+                    'src/lightsaber.js',
+                    'src/display_object.js',
+                    'src/dom_wrapper.js',
+                    'src/utils.js',                    
                     'src/engine.js',
-                    'src/factory.js',
-                    'src/strategies/base-strategy.js',
-                    'src/strategies/html-element.js',
-                    'src/strategies/js-object.js',
-                    'src/apis/jquery-api.js',
+                    'src/youtube_video.js',
+                    'src/sprite.js',
+                    'src/scene.js',
+                    'src/bitmap_data.js',
                     'src/wrapper_end.js'
                 ],
-                dest: 'dist/treequery.js',
+                dest: 'dist/lightsaber.js',
             }
         },
         requirejs: {
             options: { 
                 findNestedDependencies: true,
                 baseUrl : 'dist', 
-                name : 'treequery',                 
-                out : 'dist/treequery.min.js'
+                name : 'lightsaber',                 
+                out : 'dist/lightsaber.min.js'
             },
             lib: {
                 

@@ -9,7 +9,7 @@ LightSaber.Scene = function (game, spec, parent) {
     this.childrenDoCreate();
 };
 
-LightSaber.Scene.prototype = jwk.extend(Object.create(LightSaber.DisplayObject.prototype), {
+LightSaber.Scene.prototype = LightSaber.utils.extend(Object.create(LightSaber.DisplayObject.prototype), {
     resize: function () {
         this.state = {
             width: this.game.world.width,

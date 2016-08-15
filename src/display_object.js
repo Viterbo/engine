@@ -17,7 +17,7 @@ LightSaber.DisplayObject = function (game,spec,parent) {
     this.sortChildren();
 };
 
-LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prototype), {
+LightSaber.DisplayObject.prototype = LightSaber.utils.extend(Object.create(Phaser.Sprite.prototype), {
 
     constructor: LightSaber.DisplayObject,
     getDependencies: function () {
@@ -364,7 +364,7 @@ LightSaber.DisplayObject.prototype = jwk.extend(Object.create(Phaser.Sprite.prot
                 var tween = this.game.add.tween(this).to( this.state, this.spec.tween.time, this.spec.tween.ease, true, this.spec.tween.delay);
             } else {
                 console.log("this.state: ", this.state, [this]);
-                jwk.extend(this, this.state);
+                LightSaber.utils.extend(this, this.state);
             }
         }
     }

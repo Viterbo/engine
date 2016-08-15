@@ -20,7 +20,7 @@ LightSaber.Sprite = function (game, spec, parent) {
     this.sortChildren();    
 };
 
-LightSaber.Sprite.prototype = jwk.extend(Object.create(LightSaber.DisplayObject.prototype), {
+LightSaber.Sprite.prototype = LightSaber.utils.extend(Object.create(LightSaber.DisplayObject.prototype), {
     create: function () {        
         //this.game.add.existing(this.phaserObj);    
 
