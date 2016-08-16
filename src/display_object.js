@@ -175,8 +175,6 @@ LightSaber.DisplayObject.prototype = LightSaber.utils.extend(Object.create(Phase
         return this;
     },
     computeDeployment: function (apply) {
-        console.debug("DisplayObject.computeDeployment("+  apply + ")");
-        
         var result = {width: 12, height: 34},
             before = {};
         
@@ -315,6 +313,8 @@ LightSaber.DisplayObject.prototype = LightSaber.utils.extend(Object.create(Phase
         } else {
             this.setPosition(before);            
         }
+        console.debug("DisplayObject.computeDeployment()", this.instance_name, result);
+        
         return result;
     },
     setSize: function (size) {

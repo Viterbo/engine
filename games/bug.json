@@ -14,8 +14,15 @@
                 "fillStyle": "#00A",
                 "anchors": [
                     { "my": "top left", "at": "bottom left", "of": "parent.header" },
-                    { "my": "bottom right", "at": "bottom right", "of": "parent" }
+                    { "my": "bottom right", "at": "top right", "of": "parent.footer" }
                 ]                
+            },
+            "footer": {
+                "type": "BitmapData",
+                "fillStyle": "#030",
+                "width": "100%",
+                "height": "5%",
+                "position": { "my": "bottom left", "at": "bottom left", "of": "parent" }
             }
         }        
     }

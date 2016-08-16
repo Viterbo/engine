@@ -1,6 +1,6 @@
 {
   "name": "treequery",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "homepage": "https://github.com/vapaee/treequery",
   "description": "Reimplementation of jquery but suitable for any kind of tree data structures.",
   "main": "dist/treequery.min.js",
@@ -44,13 +44,13 @@
     "qunit": "~1.18.0",
     "jquery": "^2.2.2"
   },
-  "_release": "0.1.5",
+  "_release": "0.1.6",
   "_resolution": {
     "type": "version",
-    "tag": "0.1.5",
-    "commit": "efa02b362eefc4ff325fd28165ded71457806739"
+    "tag": "0.1.6",
+    "commit": "852adbeed0a1520f48f41f971770bd4ffb95c83c"
   },
   "_source": "https://github.com/vapaee/treequery.git",
-  "_target": "^0.1.4",
+  "_target": "^0.1.5",
   "_originalSource": "treequery"
 }
