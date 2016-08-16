@@ -1,5 +1,4 @@
-LightSaber.DisplayObject = function (game,spec,parent) {
-    console.log("spec.texture", spec.texture)
+LightSaber.DisplayObject = function (game,spec,parent) {    
     Phaser.Sprite.call(this, game, 0, 0, spec.texture);
     this.game = game;
     this.spec = spec;
@@ -312,8 +311,7 @@ LightSaber.DisplayObject.prototype = LightSaber.utils.extend(Object.create(Phase
             this.setPosition(result);
         } else {
             this.setPosition(before);            
-        }
-        console.debug("DisplayObject.computeDeployment()", this.instance_name, result);
+        }        
         
         return result;
     },
@@ -363,7 +361,7 @@ LightSaber.DisplayObject.prototype = LightSaber.utils.extend(Object.create(Phase
             if (this._update_state_use_tween) {
                 var tween = this.game.add.tween(this).to( this.state, this.spec.tween.time, this.spec.tween.ease, true, this.spec.tween.delay);
             } else {
-                console.log("this.state: ", this.state, [this]);
+                // console.log("this.state: ", this.state, [this]);
                 LightSaber.utils.extend(this, this.state);
             }
         }

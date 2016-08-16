@@ -56,7 +56,7 @@ LightSaber.prototype = {
     },
     clear: function () {
     },
-    resize :function () {        
+    resize :function () {
         var height, width;
         if (this._settings.full_document) {
             height = window.innerHeight;
@@ -68,7 +68,11 @@ LightSaber.prototype = {
                 width = $obj.width();
             }            
         }
-        if (this.engine) this.engine._ls_resize(width, height);
+        if (this.engine && (this._last_width != width || this._last_height != height)) {
+            this.engine._ls_resize(width, height);
+        }
+        this._last_width = width;
+        this._last_height = height;
     },
     enter_section: function (section) {
         this._section = section;

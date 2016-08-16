@@ -69,6 +69,8 @@ LightSaber_Engine_prototype = {
         this._game.stage.height = height;
         
         this.scene.resize();
+        // console.debug("--------> this._game.time.time: ", this._game.time.time);
+        this._game.raf.updateRAF(this._game.time.time);
         
     },
     _ls_start: function (){

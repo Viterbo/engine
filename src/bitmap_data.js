@@ -11,8 +11,7 @@ LightSaber.BitmapData = function (game, spec, parent) {
 };
 
 LightSaber.BitmapData.prototype = LightSaber.utils.extend(Object.create(LightSaber.DisplayObject.prototype), {
-    create: function () {
-        console.log("SSSSSSSSSSSSSSS");
+    create: function () {        
         var pos, color = LightSaber.utils.hexToRgb(this.spec.fillStyle);
         this.bmd.fill(color.r, color.g, color.b);        
         this.childrenDoCreate();
